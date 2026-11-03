@@ -1451,6 +1451,157 @@ const MapController = {
     }
   },
 
+/**
+ * Realistic UK Street Geographic Layout Engine
+ * Calculates authentic street frontages (Odd numbers on Left, Even on Right)
+ * progressing sequentially along the street's natural axis, with draggable fine-tuning.
+ */
+const GeoLayoutService = {
+  getStreetAngle(postcode) {
+    const raw = localStorage.getItem(`street_angle_${postcode}`);
+    return raw !== null ? parseFloat(raw) : 38; // Default 38 degrees
+  },
+
+  setStreetAngle(postcode, angle) {
+    localStorage.setItem(`street_angle_${postcode}`, angle.toString());
+  },
+
+  resetCustomPins(postcode, addresses) {
+    if (!addresses || !postcode) return;
+    addresses.forEach(addr => {
+      localStorage.removeItem(`pin_${postcode}_${addr}`);
+    });
+  },
+
+  computePositions(centerLat, centerLng, groupedProperties, postcode) {
+    const addresses = Object.keys(groupedProperties);
+    const count = addresses.length;
+    if (count === 0) return;
+    if (count === 1) {
+      groupedProperties[addresses[0]].markerCoords = { lat: centerLat, lng: centerLng };
+      return;
+    }
+
+    // 1. Separate addresses into Odd, Even, and Named houses
+    const odds = [];
+    const evens = [];
+    const others = [];
+
+    addresses.forEach(addr => {
+      // Check for saved custom user coordinates first!
+      const savedKey = `pin_${postcode}_${addr}`;
+      const saved = localStorage.getItem(savedKey);
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          if (parsed && typeof parsed.lat === 'number' && typeof parsed.lng === 'number') {
+            groupedProperties[addr].markerCoords = parsed;
+            groupedProperties[addr].isCustomPosition = true;
+            return;
+          }
+        } catch (e) {}
+      }
+
+      groupedProperties[addr].isCustomPosition = false;
+      const txs = groupedProperties[addr];
+      const latest = txs && txs.length > 0 ? txs[txs.length - 1] : null;
+      const paon = latest?.address?.paon || addr;
+      const numMatch = paon.match(/\b\d+\b/);
+
+      if (numMatch) {
+        const num = parseInt(numMatch[0], 10);
+        if (num % 2 === 1) {
+          odds.push({ addr, num });
+        } else {
+          evens.push({ addr, num });
+        }
+      } else {
+        others.push({ addr, num: 99999 });
+      }
+    });
+
+    // Sort numerically within odds and evens
+    odds.sort((a, b) => a.num - b.num);
+    evens.sort((a, b) => a.num - b.num);
+
+    // 2. Street orientation & geometry parameters
+    const angleDeg = this.getStreetAngle(postcode);
+    const theta = (angleDeg * Math.PI) / 180.0;
+
+    // Meters per degree conversion
+    const mPerLat = 1.0 / 111139.0;
+    const mPerLng = 1.0 / (111139.0 * Math.cos((centerLat * Math.PI) / 180.0));
+
+    // Unit vector along the street
+    const vAlong = [Math.cos(theta), Math.sin(theta)];
+    // Unit vector perpendicular to street (across the road)
+    const vPerp = [-Math.sin(theta), Math.cos(theta)];
+
+    // Realistic plot spacing
+    const roadWidthM = 16.0; // 16m street corridor
+    const plotWidthM = count > 35 ? 11.0 : 13.5;
+    const curveAmpM = count > 12 ? 8.0 : 0.0;
+
+    const isDualFrontage = odds.length > 0 && evens.length > 0;
+
+    if (isDualFrontage) {
+      // Place Odd numbers on the Left side
+      const oddLen = odds.length;
+      odds.forEach((item, idx) => {
+        if (groupedProperties[item.addr].markerCoords && groupedProperties[item.addr].isCustomPosition) return;
+
+        const progress = oddLen > 1 ? (idx - (oddLen - 1) / 2.0) : 0;
+        const dAlong = progress * plotWidthM;
+        const normProg = oddLen > 1 ? idx / (oddLen - 1) : 0.5;
+        const curveOffset = Math.sin(normProg * Math.PI) * curveAmpM;
+        const dPerp = -(roadWidthM / 2.0) - curveOffset;
+
+        const pLat = centerLat + (dAlong * vAlong[0] + dPerp * vPerp[0]) * mPerLat;
+        const pLng = centerLng + (dAlong * vAlong[1] + dPerp * vPerp[1]) * mPerLng;
+
+        groupedProperties[item.addr].markerCoords = { lat: pLat, lng: pLng };
+      });
+
+      // Place Even numbers on the Right side
+      const evenLen = evens.length;
+      evens.forEach((item, idx) => {
+        if (groupedProperties[item.addr].markerCoords && groupedProperties[item.addr].isCustomPosition) return;
+
+        const progress = evenLen > 1 ? (idx - (evenLen - 1) / 2.0) : 0;
+        const dAlong = progress * plotWidthM;
+        const normProg = evenLen > 1 ? idx / (evenLen - 1) : 0.5;
+        const curveOffset = Math.sin(normProg * Math.PI) * curveAmpM;
+        const dPerp = (roadWidthM / 2.0) + curveOffset;
+
+        const pLat = centerLat + (dAlong * vAlong[0] + dPerp * vPerp[0]) * mPerLat;
+        const pLng = centerLng + (dAlong * vAlong[1] + dPerp * vPerp[1]) * mPerLng;
+
+        groupedProperties[item.addr].markerCoords = { lat: pLat, lng: pLng };
+      });
+
+      // Place named/other properties at the end
+      others.forEach((item, idx) => {
+        if (groupedProperties[item.addr].markerCoords && groupedProperties[item.addr].isCustomPosition) return;
+        const dAlong = ((Math.max(oddLen, evenLen) / 2.0) + idx + 1) * plotWidthM;
+        const pLat = centerLat + (dAlong * vAlong[0]) * mPerLat;
+        const pLng = centerLng + (dAlong * vAlong[1]) * mPerLng;
+        groupedProperties[item.addr].markerCoords = { lat: pLat, lng: pLng };
+      });
+    } else {
+      // Single sequential street or cul-de-sac horseshoe
+      const allSorted = addresses.slice();
+      const n = allSorted.length;
+      allSorted.forEach((addr, idx) => {
+        if (groupedProperties[addr].markerCoords && groupedProperties[addr].isCustomPosition) return;
+        const dAlong = (idx - (n - 1) / 2.0) * plotWidthM;
+        const pLat = centerLat + (dAlong * vAlong[0]) * mPerLat;
+        const pLng = centerLng + (dAlong * vAlong[1]) * mPerLng;
+        groupedProperties[addr].markerCoords = { lat: pLat, lng: pLng };
+      });
+    }
+  }
+};
+
   renderHouseMarkers(centerLat, centerLng, groupedProperties, selectedAddress) {
     // Clear old house markers
     if (state.houseMarkers && state.houseMarkers.length > 0) {
@@ -1464,6 +1615,15 @@ const MapController = {
     const addresses = Object.keys(groupedProperties);
     const count = addresses.length;
     if (count === 0) return;
+
+    // Calculate realistic geographic street positions (Dual-frontage: odd on left, even on right)
+    GeoLayoutService.computePositions(centerLat, centerLng, groupedProperties, state.currentPostcode);
+
+    // Update street angle label in UI
+    const angleLabel = document.getElementById('streetAngleLabel');
+    if (angleLabel) {
+      angleLabel.innerText = `${GeoLayoutService.getStreetAngle(state.currentPostcode)}°`;
+    }
 
     const strip = document.getElementById('mapHouseStrip');
     const carousel = document.getElementById('mapHouseCarousel');
@@ -1493,24 +1653,8 @@ const MapController = {
       }
 
       const shortPrice = '£' + Math.round(latest.price / 1000) + 'k';
-
-      // Spatial distribution around centroid so houses don't stack on exact same pixel
-      let pLat = centerLat;
-      let pLng = centerLng;
-
-      if (count > 1) {
-        // Multi-ring spiral layout
-        const angle = idx * ((2 * Math.PI) / Math.min(count, 8)) + (Math.floor(idx / 8) * 0.45);
-        const ring = Math.floor(idx / 8);
-        const dist = 0.00015 + (ring * 0.00013); // degrees (~16m)
-        pLat = centerLat + (dist * Math.cos(angle));
-        pLng = centerLng + (dist * 1.62 * Math.sin(angle));
-      }
-
-      // Store distinct house coordinates
-      if (groupedProperties[addr]) {
-        groupedProperties[addr].markerCoords = { lat: pLat, lng: pLng };
-      }
+      const coords = groupedProperties[addr].markerCoords || { lat: centerLat, lng: centerLng };
+      const isCustom = groupedProperties[addr].isCustomPosition;
 
       // Calculate spec estimates for chip & marker
       const sp = PropertySpecService.estimate(txs, state.areaStats);
@@ -1530,10 +1674,10 @@ const MapController = {
         carousel.appendChild(chip);
       }
 
-      // Add marker to Leaflet map
+      // Add marker to Leaflet map (Draggable for rooftop precision in Satellite mode!)
       if (state.mapEngine === 'leaflet' && state.leafletMap) {
         const pinHtml = `
-          <div class="house-marker-pin ${isSelected ? 'selected' : ''}" title="${addr} - ${latest.propType} - ${sp.bedrooms} (${sp.floorAreaM2}m²) - ${UI.formatCurrency(latest.price)}">
+          <div class="house-marker-pin ${isSelected ? 'selected' : ''} ${isCustom ? 'custom-placed' : ''}" title="${addr} - Drag to adjust rooftop location">
             <span class="house-badge">${shortName}</span>
             <span class="house-price">${shortPrice}</span>
           </div>
@@ -1544,10 +1688,32 @@ const MapController = {
           iconSize: [0, 0]
         });
 
-        const marker = L.marker([pLat, pLng], { icon, zIndexOffset: isSelected ? 500 : 100 }).addTo(state.leafletMap);
+        const marker = L.marker([coords.lat, coords.lng], {
+          icon,
+          draggable: true,
+          zIndexOffset: isSelected ? 500 : 100
+        }).addTo(state.leafletMap);
+
         marker.addr = addr;
+
         marker.on('click', () => {
           UI.renderHouseDossier(addr);
+        });
+
+        marker.on('dragend', (e) => {
+          const pos = e.target.getLatLng();
+          groupedProperties[addr].markerCoords = { lat: pos.lat, lng: pos.lng };
+          groupedProperties[addr].isCustomPosition = true;
+          try {
+            localStorage.setItem(`pin_${state.currentPostcode}_${addr}`, JSON.stringify({ lat: pos.lat, lng: pos.lng }));
+          } catch (err) {}
+          const el = marker.getElement()?.querySelector('.house-marker-pin');
+          if (el) el.classList.add('custom-placed');
+          UI.setInstruction(`📍 Saved rooftop location for house ${shortName}`);
+          // Refresh dossier street view link with new exact coordinates
+          if (state.selectedPropertyAddress === addr) {
+            UI.renderHouseDossier(addr);
+          }
         });
 
         state.houseMarkers.push(marker);
@@ -1930,6 +2096,37 @@ document.addEventListener('DOMContentLoaded', () => {
   if (closeSvBtn) {
     closeSvBtn.addEventListener('click', () => {
       StreetViewController.close();
+    });
+  }
+
+  // Street Road Alignment Rotate button (cycles angles: 0° N-S -> 35° NE-SW -> 65° -> 90° E-W -> 125° -> 155°)
+  const btnRotateStreet = document.getElementById('btnRotateStreet');
+  if (btnRotateStreet) {
+    btnRotateStreet.addEventListener('click', () => {
+      if (!state.currentPostcode || !state.groupedProperties) return;
+      const angles = [0, 35, 65, 90, 125, 155];
+      const current = GeoLayoutService.getStreetAngle(state.currentPostcode);
+      let nextIdx = angles.findIndex(a => Math.abs(a - current) < 10) + 1;
+      if (nextIdx < 0 || nextIdx >= angles.length) nextIdx = 0;
+      const newAngle = angles[nextIdx];
+
+      GeoLayoutService.setStreetAngle(state.currentPostcode, newAngle);
+      // Recompute and re-render house markers
+      const coords = state.currentCoords || { lat: 51.5074, lng: -0.1278 };
+      MapController.renderHouseMarkers(coords.lat, coords.lng, state.groupedProperties, state.selectedPropertyAddress);
+      UI.setInstruction(`Street road alignment rotated to ${newAngle}°`);
+    });
+  }
+
+  // Reset Custom Pins Button (snaps all dragged pins back to calculated street layout)
+  const btnResetPins = document.getElementById('btnResetPins');
+  if (btnResetPins) {
+    btnResetPins.addEventListener('click', () => {
+      if (!state.currentPostcode || !state.groupedProperties) return;
+      GeoLayoutService.resetCustomPins(state.currentPostcode, Object.keys(state.groupedProperties));
+      const coords = state.currentCoords || { lat: 51.5074, lng: -0.1278 };
+      MapController.renderHouseMarkers(coords.lat, coords.lng, state.groupedProperties, state.selectedPropertyAddress);
+      UI.setInstruction(`Reset all house pins to calculated street layout`);
     });
   }
 

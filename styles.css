@@ -243,3 +243,17 @@ body {
 .animate-fade-in {
   animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
+
+/* Custom Placed House Pins (Draggable) */
+.house-marker-pin.custom-placed {
+  border-color: #10b981 !important;
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.5);
+}
+
+.house-marker-pin.custom-placed .house-badge {
+  background: #059669 !important;
+}
+
+.house-marker-pin:active {
+  cursor: grabbing;
+}
