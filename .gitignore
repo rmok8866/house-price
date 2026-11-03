@@ -29,6 +29,7 @@ android/app/build/
 android/build/
 android/local.properties
 *.zip
+*.apk
 
 deploy/
 android/

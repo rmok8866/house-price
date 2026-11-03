@@ -114,11 +114,11 @@ const UkDataService = {
       // Local proxy not available (e.g. static hosting)
     }
 
-    // 2. Fallback to direct official HM Land Registry API
+    // 2. Direct official HM Land Registry API (with cache: 'no-store' to prevent Safari WebKit CORS drop)
     if (!data || !data.result) {
       try {
         const directUrl = `https://landregistry.data.gov.uk/data/ppi/transaction-record.json?propertyAddress.postcode=${cleanPostcode}&_pageSize=100`;
-        const res = await fetch(directUrl);
+        const res = await fetch(directUrl, { cache: 'no-store' });
         if (res.ok) {
           data = await res.json();
         } else {
@@ -126,6 +126,20 @@ const UkDataService = {
         }
       } catch (err) {
         lastError = err;
+      }
+    }
+
+    // 3. Resilient fallback for mobile Safari/WebKit restrictions: proxy via high-speed CORS relay
+    if (!data || !data.result) {
+      try {
+        const targetUrl = `https://landregistry.data.gov.uk/data/ppi/transaction-record.json?propertyAddress.postcode=${cleanPostcode}&_pageSize=100`;
+        const proxyUrl = `https://corsproxy.io/?url=${encodeURIComponent(targetUrl)}`;
+        const res = await fetch(proxyUrl, { cache: 'no-store' });
+        if (res.ok) {
+          data = await res.json();
+        }
+      } catch (proxyErr) {
+        // Fall through
       }
     }
 
@@ -201,12 +215,22 @@ const UkDataService = {
       } catch (e) {}
 
       if (!data || data.status !== 200) {
-        const url = `https://api.postcodes.io/postcodes?lon=${lng}&lat=${lat}&limit=1`;
-        const res = await fetch(url);
-        data = await res.json();
+        try {
+          const url = `https://api.postcodes.io/postcodes?lon=${lng}&lat=${lat}&limit=1`;
+          const res = await fetch(url, { cache: 'no-store' });
+          if (res.ok) data = await res.json();
+        } catch (e) {}
       }
 
-      if (data.status === 200 && data.result && data.result.length > 0) {
+      if (!data || data.status !== 200) {
+        try {
+          const targetUrl = `https://api.postcodes.io/postcodes?lon=${lng}&lat=${lat}&limit=1`;
+          const res = await fetch(`https://corsproxy.io/?url=${encodeURIComponent(targetUrl)}`, { cache: 'no-store' });
+          if (res.ok) data = await res.json();
+        } catch (e) {}
+      }
+
+      if (data && data.status === 200 && data.result && data.result.length > 0) {
         return {
           postcode: data.result[0].postcode,
           district: data.result[0].admin_district,
@@ -234,11 +258,21 @@ const UkDataService = {
     } catch (e) {}
 
     if (!data || data.status !== 200) {
-      const res = await fetch(`https://api.postcodes.io/postcodes/${encodeURIComponent(clean)}`);
-      data = await res.json();
+      try {
+        const res = await fetch(`https://api.postcodes.io/postcodes/${encodeURIComponent(clean)}`, { cache: 'no-store' });
+        if (res.ok) data = await res.json();
+      } catch (e) {}
     }
 
-    if (data.status === 200 && data.result) {
+    if (!data || data.status !== 200) {
+      try {
+        const targetUrl = `https://api.postcodes.io/postcodes/${encodeURIComponent(clean)}`;
+        const res = await fetch(`https://corsproxy.io/?url=${encodeURIComponent(targetUrl)}`, { cache: 'no-store' });
+        if (res.ok) data = await res.json();
+      } catch (e) {}
+    }
+
+    if (data && data.status === 200 && data.result) {
       return {
         lat: data.result.latitude,
         lng: data.result.longitude,
