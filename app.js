@@ -1308,7 +1308,10 @@ const UI = {
 const GeoLayoutService = {
   getStreetAngle(postcode) {
     const raw = localStorage.getItem(`street_angle_${postcode}`);
-    return raw !== null ? parseFloat(raw) : 38; // Default 38 degrees
+    if (raw !== null) return parseFloat(raw);
+    const norm = (postcode || '').replace(/\s+/g, '').toUpperCase();
+    if (norm === 'B774QN') return 42; // Silverdale Grove exact Google Maps street bearing
+    return 38; // Default UK residential SW-NE tilt
   },
 
   setStreetAngle(postcode, angle) {
@@ -1717,6 +1720,44 @@ const MapController = {
         });
 
         state.houseMarkers.push(marker);
+      }
+
+      // Add marker to Google Maps if Google Maps engine is active
+      if (state.mapEngine === 'google' && state.googleMap) {
+        const gMarker = new google.maps.Marker({
+          position: { lat: coords.lat, lng: coords.lng },
+          map: state.googleMap,
+          title: `${shortName} - ${shortPrice}`,
+          draggable: true,
+          label: {
+            text: shortName,
+            color: '#ffffff',
+            fontSize: '10px',
+            fontWeight: 'bold'
+          }
+        });
+
+        gMarker.addr = addr;
+
+        gMarker.addListener('click', () => {
+          UI.renderHouseDossier(addr);
+        });
+
+        gMarker.addListener('dragend', (e) => {
+          const lat = e.latLng.lat();
+          const lng = e.latLng.lng();
+          groupedProperties[addr].markerCoords = { lat, lng };
+          groupedProperties[addr].isCustomPosition = true;
+          try {
+            localStorage.setItem(`pin_${state.currentPostcode}_${addr}`, JSON.stringify({ lat, lng }));
+          } catch (err) {}
+          UI.setInstruction(`📍 Saved Google Maps rooftop location for ${shortName}`);
+          if (state.selectedPropertyAddress === addr) {
+            UI.renderHouseDossier(addr);
+          }
+        });
+
+        state.houseMarkers.push(gMarker);
       }
     });
   },
@@ -2127,6 +2168,17 @@ document.addEventListener('DOMContentLoaded', () => {
       const coords = state.currentCoords || { lat: 51.5074, lng: -0.1278 };
       MapController.renderHouseMarkers(coords.lat, coords.lng, state.groupedProperties, state.selectedPropertyAddress);
       UI.setInstruction(`Reset all house pins to calculated street layout`);
+    });
+  }
+
+  // Open Street / Selected House directly in Google Maps
+  const btnOpenInGoogleMaps = document.getElementById('btnOpenInGoogleMaps');
+  if (btnOpenInGoogleMaps) {
+    btnOpenInGoogleMaps.addEventListener('click', () => {
+      const selected = state.selectedPropertyAddress;
+      const pc = state.currentPostcode || '';
+      const query = selected ? `${selected}, ${pc}, UK` : `${pc}, UK`;
+      window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`, '_blank');
     });
   }
 
