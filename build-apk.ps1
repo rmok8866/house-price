@@ -32,11 +32,13 @@ try {
 
     $apkPath = "$workspace\android\app\build\outputs\apk\debug\app-debug.apk"
     if (Test-Path $apkPath) {
-        $file = Get-Item $apkPath
+        $rootApk = "$workspace\HousePrice-History.apk"
+        Copy-Item $apkPath $rootApk -Force
+        $file = Get-Item $rootApk
         $sizeMb = [math]::Round($file.Length / 1MB, 2)
         Write-Host "`n======================================================" -ForegroundColor Green
         Write-Host " SUCCESS! APK BUILT SUCCESSFULLY:" -ForegroundColor Green
-        Write-Host " Location: $apkPath" -ForegroundColor White
+        Write-Host " Root File: $rootApk" -ForegroundColor White
         Write-Host " File Size: $sizeMb MB" -ForegroundColor White
         Write-Host "======================================================`n" -ForegroundColor Green
     } else {

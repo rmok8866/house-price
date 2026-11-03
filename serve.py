@@ -173,14 +173,30 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         except (ConnectionAbortedError, ConnectionResetError, BrokenPipeError):
             pass
 
+def get_local_ip():
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(('8.8.8.8', 80))
+        ip = s.getsockname()[0]
+        s.close()
+        return ip
+    except Exception:
+        return '127.0.0.1'
+
 def run():
     os.chdir(os.path.dirname(os.path.abspath(__file__)))
+    local_ip = get_local_ip()
     with ThreadedHTTPServer(("", PORT), Handler) as httpd:
-        url = f"http://localhost:{PORT}"
         print(f"\n=======================================================")
-        print(f" UK House Price History App is running!")
-        print(f" URL: {url}")
-        print(f" Multi-threaded HTTP server with auto connection cleanup.")
+        print(f" UK House Price History App - Local Development Server")
+        print(f"=======================================================")
+        print(f" * PC Browser:    http://localhost:{PORT}")
+        print(f" * iPad / Mobile: http://{local_ip}:{PORT}")
+        print(f"")
+        print(f" Live Development:")
+        print(f" - Edit index.html, styles.css, or app.js")
+        print(f" - Press F5 / Refresh in browser for instant updates")
+        print(f" - Press Ctrl+C to stop the server")
         print(f"=======================================================\n")
         try:
             httpd.serve_forever()
