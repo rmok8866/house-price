@@ -2163,157 +2163,6 @@ const UI = {
   }
 };
 
-// Map Controller (Leaflet + Google Maps)
-const MapController = {
-  init() {
-    this.initLeaflet();
-    if (state.googleApiKey) {
-      this.initGoogleMaps(state.googleApiKey);
-    }
-  },
-
-  initLeaflet() {
-    const mapEl = document.getElementById('leafletMap');
-    if (!mapEl) return;
-
-    // Default center: London
-    state.leafletMap = L.map('leafletMap', {
-      center: [51.5074, -0.1278],
-      zoom: 14,
-      zoomControl: true
-    });
-
-    // Dark-styled OpenStreetMap tiles (CartoDB Positron / Dark)
-    this.setLeafletLayer(state.mapStyle);
-
-    // Map Click Listener
-    state.leafletMap.on('click', async e => {
-      const { lat, lng } = e.latlng;
-      await this.handleMapClick(lat, lng);
-    });
-  },
-
-  setLeafletLayer(style) {
-    if (!state.leafletMap) return;
-
-    // Remove old layers
-    state.leafletMap.eachLayer(layer => {
-      if (layer instanceof L.TileLayer) {
-        state.leafletMap.removeLayer(layer);
-      }
-    });
-
-    if (style === 'satellite') {
-      L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-        attribution: '&copy; Esri World Imagery',
-        maxZoom: 19
-      }).addTo(state.leafletMap);
-    } else {
-      L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
-        attribution: '&copy; Esri World Street Map',
-        maxZoom: 19
-      }).addTo(state.leafletMap);
-    }
-  },
-
-  async handleMapClick(lat, lng) {
-    UI.showLoading('Locating nearest UK address...');
-    UI.setInstruction('Identifying UK Postcode...');
-
-    try {
-      const geo = await UkDataService.reverseGeocode(lat, lng);
-      if (geo && geo.postcode) {
-        await this.loadPostcode(geo.postcode, lat, lng);
-      } else {
-        alert('Could not resolve a UK residential postcode at this exact position. Please click closer to a UK property or street.');
-        UI.hideLoading();
-      }
-    } catch (err) {
-      console.error(err);
-      alert('Error during address lookup: ' + err.message);
-      UI.hideLoading();
-    }
-  },
-
-  async loadPostcode(rawPostcode, lat, lng, preferredAddress = null) {
-    let postcode = formatUkPostcode(rawPostcode);
-
-    // Update search box with clean canonical postcode
-    const searchInput = document.getElementById('searchInput');
-    if (searchInput && postcode) searchInput.value = postcode;
-
-    UI.showLoading(`Querying HM Land Registry for ${postcode}...`);
-    UI.setInstruction(`Fetching official Price Paid Data for ${postcode}...`);
-
-    try {
-      // Validate with postcodes.io to get canonical formatting and exact coordinates
-      try {
-        const coords = await UkDataService.getPostcodeCoordinates(postcode);
-        postcode = coords.postcode; // Use official canonical postcode (e.g. B77 4QN)
-        if (searchInput) searchInput.value = postcode;
-        if (!lat || !lng) {
-          lat = coords.lat;
-          lng = coords.lng;
-        }
-      } catch (coordsErr) {
-        console.warn('Could not verify postcode coordinates with postcodes.io:', coordsErr);
-      }
-
-      state.currentCoords = { lat, lng };
-
-      // Concurrently fetch official EPC certificates for this postcode
-      EpcService.fetchPostcode(postcode);
-
-      // Query Land Registry with canonical postcode
-      const transactions = await UkDataService.fetchPricePaid(postcode);
-      state.currentPostcode = postcode;
-      state.currentTransactions = transactions;
-      state.groupedProperties = UkDataService.groupTransactions(transactions);
-
-      const addressKeys = Object.keys(state.groupedProperties);
-      document.getElementById('houseBadgeCount').innerText = addressKeys.length;
-
-      // Update Map View (Zoom close to houses)
-      this.panTo(lat, lng, 18);
-      this.dropMarker(lat, lng, postcode);
-
-      if (transactions.length === 0) {
-        alert(`No HM Land Registry residential sale transactions found for postcode ${postcode}. This postcode may be commercial, newly registered, or unrecorded.`);
-      } else {
-        // Persist last successful search and update history
-        try {
-          localStorage.setItem('last_searched_postcode', postcode);
-          if (lat && lng) {
-            localStorage.setItem('last_map_coords', JSON.stringify({ lat, lng }));
-          }
-          SearchHistory.add(postcode);
-        } catch (e) {}
-
-        // Select preferred address if available, otherwise saved house if matches, otherwise lowest house number
-        let targetAddress = addressKeys[0];
-        const savedHouse = preferredAddress || localStorage.getItem('last_selected_property');
-        if (savedHouse && addressKeys.includes(savedHouse)) {
-          targetAddress = savedHouse;
-        }
-
-        // Render individual pins on map for EVERY property on this street!
-        this.renderHouseMarkers(lat, lng, state.groupedProperties, targetAddress);
-
-        // Discover and plot surrounding neighborhood streets!
-        this.fetchSurroundingStreets(lat, lng, postcode);
-
-        UI.renderHouseDossier(targetAddress);
-        UI.renderAreaStats(postcode, transactions);
-        UI.setInstruction(`Displaying ${addressKeys.length} properties (${transactions.length} sales) in ${postcode}`);
-      }
-    } catch (err) {
-      console.error(err);
-      alert(`Failed to load Land Registry data: ${err.message}`);
-    } finally {
-      UI.hideLoading();
-    }
-  },
-
 /**
  * Realistic UK Street Geographic Layout Engine
  * Calculates authentic street frontages (Odd numbers on Left, Even on Right)
@@ -2464,6 +2313,157 @@ const GeoLayoutService = {
     }
   }
 };
+
+// Map Controller (Leaflet + Google Maps)
+const MapController = {
+  init() {
+    this.initLeaflet();
+    if (state.googleApiKey) {
+      this.initGoogleMaps(state.googleApiKey);
+    }
+  },
+
+  initLeaflet() {
+    const mapEl = document.getElementById('leafletMap');
+    if (!mapEl) return;
+
+    // Default center: London
+    state.leafletMap = L.map('leafletMap', {
+      center: [51.5074, -0.1278],
+      zoom: 14,
+      zoomControl: true
+    });
+
+    // Dark-styled OpenStreetMap tiles (CartoDB Positron / Dark)
+    this.setLeafletLayer(state.mapStyle);
+
+    // Map Click Listener
+    state.leafletMap.on('click', async e => {
+      const { lat, lng } = e.latlng;
+      await this.handleMapClick(lat, lng);
+    });
+  },
+
+  setLeafletLayer(style) {
+    if (!state.leafletMap) return;
+
+    // Remove old layers
+    state.leafletMap.eachLayer(layer => {
+      if (layer instanceof L.TileLayer) {
+        state.leafletMap.removeLayer(layer);
+      }
+    });
+
+    if (style === 'satellite') {
+      L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+        attribution: '&copy; Esri World Imagery',
+        maxZoom: 19
+      }).addTo(state.leafletMap);
+    } else {
+      L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+        attribution: '&copy; Esri World Street Map',
+        maxZoom: 19
+      }).addTo(state.leafletMap);
+    }
+  },
+
+  async handleMapClick(lat, lng) {
+    UI.showLoading('Locating nearest UK address...');
+    UI.setInstruction('Identifying UK Postcode...');
+
+    try {
+      const geo = await UkDataService.reverseGeocode(lat, lng);
+      if (geo && geo.postcode) {
+        await this.loadPostcode(geo.postcode, lat, lng);
+      } else {
+        alert('Could not resolve a UK residential postcode at this exact position. Please click closer to a UK property or street.');
+        UI.hideLoading();
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Error during address lookup: ' + err.message);
+      UI.hideLoading();
+    }
+  },
+
+  async loadPostcode(rawPostcode, lat, lng, preferredAddress = null) {
+    let postcode = formatUkPostcode(rawPostcode);
+
+    // Update search box with clean canonical postcode
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput && postcode) searchInput.value = postcode;
+
+    UI.showLoading(`Querying HM Land Registry for ${postcode}...`);
+    UI.setInstruction(`Fetching official Price Paid Data for ${postcode}...`);
+
+    try {
+      // Validate with postcodes.io to get canonical formatting and exact coordinates
+      try {
+        const coords = await UkDataService.getPostcodeCoordinates(postcode);
+        postcode = coords.postcode; // Use official canonical postcode (e.g. B77 4QN)
+        if (searchInput) searchInput.value = postcode;
+        if (!lat || !lng) {
+          lat = coords.lat;
+          lng = coords.lng;
+        }
+      } catch (coordsErr) {
+        console.warn('Could not verify postcode coordinates with postcodes.io:', coordsErr);
+      }
+
+      state.currentCoords = { lat, lng };
+
+      // Concurrently fetch official EPC certificates for this postcode
+      EpcService.fetchPostcode(postcode);
+
+      // Query Land Registry with canonical postcode
+      const transactions = await UkDataService.fetchPricePaid(postcode);
+      state.currentPostcode = postcode;
+      state.currentTransactions = transactions;
+      state.groupedProperties = UkDataService.groupTransactions(transactions);
+
+      const addressKeys = Object.keys(state.groupedProperties);
+      document.getElementById('houseBadgeCount').innerText = addressKeys.length;
+
+      // Update Map View (Zoom close to houses)
+      this.panTo(lat, lng, 18);
+      this.dropMarker(lat, lng, postcode);
+
+      if (transactions.length === 0) {
+        alert(`No HM Land Registry residential sale transactions found for postcode ${postcode}. This postcode may be commercial, newly registered, or unrecorded.`);
+      } else {
+        // Persist last successful search and update history
+        try {
+          localStorage.setItem('last_searched_postcode', postcode);
+          if (lat && lng) {
+            localStorage.setItem('last_map_coords', JSON.stringify({ lat, lng }));
+          }
+          SearchHistory.add(postcode);
+        } catch (e) {}
+
+        // Select preferred address if available, otherwise saved house if matches, otherwise lowest house number
+        let targetAddress = addressKeys[0];
+        const savedHouse = preferredAddress || localStorage.getItem('last_selected_property');
+        if (savedHouse && addressKeys.includes(savedHouse)) {
+          targetAddress = savedHouse;
+        }
+
+        // Render individual pins on map for EVERY property on this street!
+        this.renderHouseMarkers(lat, lng, state.groupedProperties, targetAddress);
+
+        // Discover and plot surrounding neighborhood streets!
+        this.fetchSurroundingStreets(lat, lng, postcode);
+
+        UI.renderHouseDossier(targetAddress);
+        UI.renderAreaStats(postcode, transactions);
+        UI.setInstruction(`Displaying ${addressKeys.length} properties (${transactions.length} sales) in ${postcode}`);
+      }
+    } catch (err) {
+      console.error(err);
+      alert(`Failed to load Land Registry data: ${err.message}`);
+    } finally {
+      UI.hideLoading();
+    }
+  },
 
   renderHouseMarkers(centerLat, centerLng, groupedProperties, selectedAddress) {
     // Clear old house markers
