@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>UK House Price History | Land Registry & Google Maps</title>
+  
+  <!-- PWA Meta Tags -->
+  <meta name="theme-color" content="#0f172a" />
+  <meta name="description" content="Check historical house sale prices and capital appreciation in the UK using Google Maps and official HM Land Registry data." />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%232563eb'><path d='M12 3L2 12h3v8h6v-6h2v6h6v-8h3L12 3z'/></svg>" />
+
+  <!-- Leaflet CSS for immediate zero-config map fallback -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="bg-slate-900 text-slate-100 antialiased overflow-hidden select-none">
+  <div id="app" class="flex flex-col h-screen w-screen overflow-hidden">
+    
+    <!-- Top Navigation Bar -->
+    <header class="header bg-slate-900/90 backdrop-blur-md border-b border-slate-800 z-30 px-4 py-3 flex items-center justify-between shrink-0 shadow-lg">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center shadow-md shadow-blue-500/20">
+          <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+          </svg>
+        </div>
+        <div>
+          <div class="flex items-center space-x-2">
+            <h1 class="text-base font-bold tracking-tight text-white">UK House Price History</h1>
+            <span class="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">Official HMLR Data</span>
+          </div>
+          <p class="text-xs text-slate-400 hidden sm:block">Click any house on Google Maps to inspect historical sales & capital growth</p>
+        </div>
+      </div>
+
+      <!-- Search & Controls -->
+      <div class="flex items-center space-x-2">
+        <div class="relative w-48 sm:w-64 md:w-80">
+          <input 
+            type="text" 
+            id="searchInput" 
+            placeholder="Search UK Postcode (e.g. SW11 1TH)..." 
+            class="w-full bg-slate-800/90 text-sm text-slate-100 placeholder-slate-400 pl-9 pr-4 py-2 rounded-xl border border-slate-700/80 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all shadow-inner uppercase tracking-wider"
+          />
+          <svg class="w-4 h-4 text-slate-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+          </svg>
+        </div>
+
+        <button id="locateBtn" title="Use current GPS location" class="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm8.94 3A8.994 8.994 0 0013 3.06V1h-2v2.06A8.994 8.994 0 003.06 11H1v2h2.06A8.994 8.994 0 0011 20.94V23h2v-2.06A8.994 8.994 0 0020.94 13H23v-2h-2.06zM12 19c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/>
+          </svg>
+        </button>
+
+        <button id="settingsBtn" title="Map & API Key Settings" class="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition flex items-center space-x-1.5 text-xs font-medium">
+          <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+          </svg>
+          <span class="hidden md:inline" id="mapEngineBadge">Maps Setup</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Quick Location Chips (preset showcase addresses & recent history) -->
+    <div class="preset-bar bg-slate-950/80 border-b border-slate-800/80 px-4 py-2 flex items-center space-x-2 overflow-x-auto text-xs shrink-0 no-scrollbar z-20">
+      <!-- Recent Searches Container -->
+      <div id="recentSearchesContainer" class="flex items-center space-x-2 shrink-0 hidden">
+        <span class="text-blue-400 font-semibold uppercase tracking-wider text-[11px] shrink-0 flex items-center space-x-1">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          <span>Recent:</span>
+        </span>
+        <div id="recentChips" class="flex items-center space-x-1.5 shrink-0"></div>
+        <div class="h-4 w-px bg-slate-800 shrink-0 mx-1"></div>
+      </div>
+
+      <span class="text-slate-500 font-semibold uppercase tracking-wider text-[11px] shrink-0">Sample UK Hotspots:</span>
+      <button class="preset-chip" data-postcode="SW11 1TH" data-label="Wandsworth, London">🏡 Wandsworth, London (SW11)</button>
+      <button class="preset-chip" data-postcode="E1 6AN" data-label="Spitalfields, London">🏢 Spitalfields City (E1)</button>
+      <button class="preset-chip" data-postcode="W1K 6ZA" data-label="Mayfair, London">💎 Mayfair Prime (W1K)</button>
+      <button class="preset-chip" data-postcode="M1 1AD" data-label="Manchester City">🏙️ Manchester City (M1)</button>
+      <button class="preset-chip" data-postcode="CB2 1SJ" data-label="Cambridge">🎓 Cambridge (CB2)</button>
+      <button class="preset-chip" data-postcode="BS8 4HG" data-label="Clifton, Bristol">🌉 Clifton, Bristol (BS8)</button>
+      <button class="preset-chip" data-postcode="B17 9QG" data-label="Harborne, Birmingham">🌳 Birmingham (B17)</button>
+    </div>
+
+    <!-- Main Workspace (Split View) -->
+    <main class="flex-1 relative flex flex-col md:flex-row overflow-hidden">
+      
+      <!-- Left Panel: Interactive Map Area -->
+      <div id="mapContainer" class="relative flex-1 h-[45vh] md:h-full w-full bg-slate-950">
+        <!-- The actual map DOM elements -->
+        <div id="googleMap" class="w-full h-full hidden"></div>
+        <div id="leafletMap" class="w-full h-full"></div>
+
+        <!-- Floating Map Overlay Controls -->
+        <div class="absolute top-4 left-4 z-[500] flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-2">
+          <!-- Map Style Switcher (Road vs Satellite vs Street View) -->
+          <div class="bg-slate-900/90 backdrop-blur-md rounded-xl p-1 border border-slate-700/80 flex shadow-lg">
+            <button id="btnMapRoad" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-blue-600 text-white transition shadow-sm">Roadmap</button>
+            <button id="btnMapSat" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-white transition">Satellite</button>
+            <button id="btnMapStreetView" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-amber-300 transition flex items-center space-x-1">
+              <svg class="w-3.5 h-3.5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+              <span>Street View</span>
+            </button>
+          </div>
+
+          <!-- Scan Neighborhood Button -->
+          <button id="btnScanArea" class="bg-slate-900/90 hover:bg-slate-800 text-slate-200 hover:text-white backdrop-blur-md px-3 py-1.5 rounded-xl border border-slate-700/80 text-xs font-semibold flex items-center space-x-1.5 shadow-lg transition">
+            <svg class="w-3.5 h-3.5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7"/>
+            </svg>
+            <span>Scan Neighborhood</span>
+          </button>
+        </div>
+
+        <!-- Floating Selection Banner -->
+        <div id="mapInstructionBanner" class="absolute top-4 right-4 z-[500] bg-slate-900/95 backdrop-blur-md border border-slate-700 px-3.5 py-2 rounded-xl shadow-xl flex items-center space-x-2 text-xs text-slate-300 max-w-xs transition-opacity duration-300">
+          <span class="relative flex h-2 w-2">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+          </span>
+          <span id="instructionText">Tap any building/house on the map to query HM Land Registry history</span>
+        </div>
+
+        <!-- Floating Bottom House Strip (Houses on this street) -->
+        <div id="mapHouseStrip" class="absolute bottom-4 left-4 right-4 z-[500] hidden">
+          <div class="bg-slate-900/95 backdrop-blur-md border border-slate-700/80 rounded-2xl p-2.5 shadow-2xl space-y-1.5 max-w-full">
+            <div class="flex items-center justify-between text-[11px] px-1">
+              <span class="text-slate-400 font-semibold uppercase tracking-wider flex items-center space-x-1.5">
+                <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                <span>Houses on this Street (<span id="stripPostcodeLabel" class="text-blue-400 font-mono">B77 4RP</span>):</span>
+              </span>
+              <span id="stripHouseCount" class="text-slate-500">16 houses with sale records</span>
+            </div>
+            <div id="mapHouseCarousel" class="flex items-center space-x-2 overflow-x-auto no-scrollbar py-1">
+              <!-- Dynamically populated house badges -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Loading Spinner Overlay -->
+        <div id="mapLoading" class="absolute inset-0 bg-slate-950/70 backdrop-blur-sm z-[600] flex flex-col items-center justify-center space-y-3 hidden">
+          <div class="w-12 h-12 rounded-full border-4 border-blue-500/20 border-t-blue-500 animate-spin"></div>
+          <p id="loadingMsg" class="text-sm font-semibold text-slate-200">Querying HM Land Registry API...</p>
+        </div>
+      </div>
+
+      <!-- Right Panel: Property Dossier & Market Analysis -->
+      <aside id="detailsPanel" class="w-full md:w-[480px] lg:w-[540px] xl:w-[600px] h-[55vh] md:h-full bg-slate-900 border-t md:border-t-0 md:border-l border-slate-800 flex flex-col overflow-hidden shadow-2xl z-20">
+        
+        <!-- Panel Tabs -->
+        <div class="bg-slate-900/90 border-b border-slate-800 px-4 pt-3 flex space-x-6 text-sm font-medium shrink-0">
+          <button id="tabHouseBtn" class="panel-tab active pb-2.5 border-b-2 border-blue-500 text-white flex items-center space-x-2">
+            <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+            </svg>
+            <span>House History</span>
+            <span id="houseBadgeCount" class="text-[10px] bg-blue-500/20 text-blue-400 px-1.5 py-0.2 rounded-full">0</span>
+          </button>
+          <button id="tabAreaBtn" class="panel-tab pb-2.5 border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex items-center space-x-2">
+            <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+            </svg>
+            <span>Street & Postcode Stats</span>
+          </button>
+        </div>
+
+        <!-- Scrollable Tab Content Container -->
+        <div class="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar">
+          
+          <!-- Empty State (No House Selected Yet) -->
+          <div id="emptyState" class="py-12 flex flex-col items-center justify-center text-center px-6">
+            <div class="w-16 h-16 rounded-2xl bg-slate-800/80 border border-slate-700 flex items-center justify-center text-blue-400 mb-4 shadow-inner">
+              <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+              </svg>
+            </div>
+            <h3 class="text-base font-bold text-slate-200 mb-1">Select a House on Google Maps</h3>
+            <p class="text-xs text-slate-400 max-w-sm mb-6 leading-relaxed">
+              Click anywhere on the map or type a UK postcode above to view historical sale prices from official HM Land Registry Price Paid Data (1995 to present).
+            </p>
+            <div class="w-full bg-slate-800/40 rounded-xl p-3 border border-slate-800 text-left">
+              <div class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-2">Available Data Points:</div>
+              <ul class="text-xs text-slate-300 space-y-1.5 list-disc list-inside">
+                <li>Every sale price recorded by HM Land Registry</li>
+                <li>Freehold vs. Leasehold tenure classification</li>
+                <li>Property type (Detached, Semi, Terraced, Flat)</li>
+                <li>Capital appreciation & Compound Annual Growth Rate (CAGR)</li>
+                <li>Postcode-wide average and price distribution</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- TAB 1: Selected House History View -->
+          <div id="houseContent" class="space-y-4 hidden">
+            
+            <!-- Address Header Card -->
+            <div class="bg-gradient-to-br from-slate-800/90 to-slate-800/50 rounded-2xl p-4 border border-slate-700/80 shadow-md">
+              <div class="flex items-start justify-between">
+                <div>
+                  <div class="flex items-center space-x-2 mb-1 flex-wrap gap-y-1">
+                    <span id="propTypeBadge" class="px-2.5 py-0.5 rounded-md text-[11px] font-bold bg-blue-500/20 text-blue-400 border border-blue-500/30 uppercase">Terraced</span>
+                    <span id="propBedBadge" class="px-2.5 py-0.5 rounded-md text-[11px] font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 uppercase">3 Beds</span>
+                    <span id="propSizeBadge" class="px-2.5 py-0.5 rounded-md text-[11px] font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 font-mono">92 m²</span>
+                    <span id="propTenureBadge" class="px-2.5 py-0.5 rounded-md text-[11px] font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30 uppercase">Freehold</span>
+                    <span id="propCouncilTaxBadge" class="px-2.5 py-0.5 rounded-md text-[11px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 uppercase">Band D (~£2,171/yr)</span>
+                    <span id="propBuildBadge" class="px-2.5 py-0.5 rounded-md text-[11px] font-bold bg-purple-500/20 text-purple-300 border border-purple-500/30 uppercase hidden">New Build</span>
+                  </div>
+                  <h2 id="propAddressTitle" class="text-lg font-extrabold text-white tracking-tight">211A St Johns Hill</h2>
+                  <p id="propAddressSub" class="text-xs text-slate-400">London, Wandsworth &bull; <span class="font-mono text-slate-300">SW11 1TH</span></p>
+                  <div class="mt-2.5 flex items-center space-x-2">
+                    <button id="btnOpenStreetView" class="px-3 py-1.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold flex items-center space-x-1.5 shadow-md shadow-blue-500/20 transition">
+                      <svg class="w-3.5 h-3.5 text-amber-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                      <span>Google Street View (360°)</span>
+                    </button>
+                    <a id="btnExternalStreetView" href="#" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 text-xs font-medium flex items-center space-x-1 transition" title="Open Street View in Google Maps">
+                      <span class="text-[11px]">Map</span>
+                      <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                    </a>
+                  </div>
+                </div>
+                <div class="text-right">
+                  <span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Latest Sold</span>
+                  <div id="propLatestPrice" class="text-xl font-extrabold text-emerald-400 font-mono tracking-tight">£178,000</div>
+                  <div id="propLatestDate" class="text-[11px] text-slate-400">25 Sep 2001</div>
+                </div>
+              </div>
+
+              <!-- House Selector Dropdown (When multiple houses are in this postcode) -->
+              <div class="mt-3 pt-3 border-t border-slate-700/60 flex items-center justify-between text-xs">
+                <span class="text-slate-400">Select property in this street:</span>
+                <select id="propertySelect" class="bg-slate-900 text-xs text-slate-200 border border-slate-700 rounded-lg px-2.5 py-1 focus:ring-1 focus:ring-blue-500 focus:outline-none max-w-[240px] truncate">
+                  <!-- Options injected dynamically -->
+                </select>
+              </div>
+            </div>
+
+            <!-- House Visual Snapshot & Google Maps Card -->
+            <div class="bg-gradient-to-br from-slate-800/90 to-slate-800/60 rounded-2xl p-3 border border-slate-700/80 shadow-md space-y-2.5">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                  <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                  <span id="snapshotTitle" class="text-xs font-bold text-white uppercase tracking-wider">House Snapshot Preview</span>
+                </div>
+                <span id="snapshotStatus" class="text-[10px] text-blue-300 font-mono bg-blue-950/80 px-2 py-0.5 rounded-full border border-blue-700/60">Targeted Address Pin</span>
+              </div>
+
+              <!-- Interactive Snapshot Visual Container -->
+              <div class="relative w-full h-44 rounded-xl overflow-hidden border border-slate-700/80 bg-slate-950">
+                <!-- High-Res Google Satellite Aerial Frame focused on this exact house -->
+                <iframe id="houseSnapshotIframe" class="w-full h-full border-0" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+
+                <!-- Gradient Overlay Controls -->
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-transparent to-slate-950/40 pointer-events-none"></div>
+
+                <!-- Floating House Address Badge -->
+                <div class="absolute top-2.5 left-2.5 bg-slate-900/90 backdrop-blur-md px-2.5 py-1 rounded-lg border border-slate-700/80 shadow-lg pointer-events-none flex items-center space-x-1.5">
+                  <span class="w-2 h-2 rounded-full bg-blue-400"></span>
+                  <span id="snapshotAddressLabel" class="text-[11px] font-bold text-white font-mono">Loading house...</span>
+                </div>
+
+                <!-- Floating Action Buttons on Snapshot -->
+                <div class="absolute bottom-2.5 left-2.5 right-2.5 flex items-center justify-between gap-2">
+                  <a id="snapshotGoogleMapsBtn" href="#" target="_blank" rel="noopener noreferrer" class="flex-1 py-1.5 px-3 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs shadow-md transition flex items-center justify-center space-x-1.5">
+                    <svg class="w-3.5 h-3.5 text-amber-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/></svg>
+                    <span>Open in Google Maps</span>
+                  </a>
+                  <button id="snapshotStreetViewBtn" class="py-1.5 px-3 rounded-lg bg-slate-900/90 hover:bg-slate-800 text-slate-200 hover:text-white border border-slate-700 text-xs font-semibold shadow-md transition flex items-center space-x-1.5">
+                    <svg class="w-3.5 h-3.5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                    <span>360° Street View</span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="flex items-center justify-between text-[11px] text-slate-400 px-1">
+                <span class="truncate">Linked specifically to this house number (prevents jumping to neighbors)</span>
+                <span class="text-emerald-400 font-mono text-[10px] font-semibold">Verified Target</span>
+              </div>
+            </div>
+
+            <!-- Financial Appreciation KPI Cards -->
+            <div id="kpiContainer" class="grid grid-cols-3 gap-2.5">
+              <div class="bg-slate-800/60 rounded-xl p-3 border border-slate-800">
+                <div class="text-[10px] text-slate-400 uppercase font-semibold">Total Gain</div>
+                <div id="kpiTotalGain" class="text-sm sm:text-base font-bold text-emerald-400 font-mono mt-0.5">+£102,000</div>
+                <div id="kpiGainPercent" class="text-[11px] text-emerald-500/80 font-medium">+134.2%</div>
+              </div>
+              <div class="bg-slate-800/60 rounded-xl p-3 border border-slate-800">
+                <div class="text-[10px] text-slate-400 uppercase font-semibold">Annual CAGR</div>
+                <div id="kpiCagr" class="text-sm sm:text-base font-bold text-blue-400 font-mono mt-0.5">+18.5%</div>
+                <div class="text-[11px] text-slate-400">Per Year</div>
+              </div>
+              <div class="bg-slate-800/60 rounded-xl p-3 border border-slate-800">
+                <div class="text-[10px] text-slate-400 uppercase font-semibold">Tracked Sales</div>
+                <div id="kpiSalesCount" class="text-sm sm:text-base font-bold text-white font-mono mt-0.5">3</div>
+                <div id="kpiTimespan" class="text-[11px] text-slate-400">1996 - 2001</div>
+              </div>
+            </div>
+
+            <!-- Property Size, Bedrooms & Layout Specifications -->
+            <div class="bg-gradient-to-br from-slate-800/90 to-slate-800/50 rounded-2xl p-3.5 border border-slate-700/80 shadow-md space-y-2.5">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                  <svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                  </svg>
+                  <span class="text-xs font-bold uppercase tracking-wider text-slate-200">Size & Room Specifications</span>
+                </div>
+                <div class="flex items-center space-x-1.5">
+                  <span id="specSourceBadge" class="text-[9px] text-emerald-400 font-semibold bg-emerald-950/60 px-2 py-0.5 rounded-full border border-emerald-700/50">UK Baseline</span>
+                  <span id="specTypeDesc" class="text-[10px] text-indigo-300 font-semibold bg-indigo-950/60 px-2 py-0.5 rounded-full border border-indigo-700/50">3-Bed Home</span>
+                </div>
+              </div>
+
+              <!-- 4-Stat Grid -->
+              <div class="grid grid-cols-4 gap-2 text-center">
+                <div class="bg-slate-900/70 rounded-xl p-2 border border-slate-800/90">
+                  <div class="text-[9px] text-slate-400 uppercase font-semibold">Bedrooms</div>
+                  <div id="specBedrooms" class="text-sm font-bold text-indigo-400 font-mono mt-0.5">3 Beds</div>
+                  <div class="text-[9px] text-slate-400" id="specHabitableRooms">4-5 Rooms</div>
+                </div>
+                <div class="bg-slate-900/70 rounded-xl p-2 border border-slate-800/90">
+                  <div class="text-[9px] text-slate-400 uppercase font-semibold">Floor Area</div>
+                  <div id="specFloorArea" class="text-sm font-bold text-white font-mono mt-0.5">88 m²</div>
+                  <div id="specFloorSqFt" class="text-[9px] text-slate-400">~947 sq ft</div>
+                  <div id="specFloorSource" class="text-[8px] text-emerald-400/80 font-mono">UK Standard</div>
+                </div>
+                <div class="bg-slate-900/70 rounded-xl p-2 border border-slate-800/90">
+                  <div class="text-[9px] text-slate-400 uppercase font-semibold">Bathrooms</div>
+                  <div id="specBathrooms" class="text-sm font-bold text-white font-mono mt-0.5">1 - 2</div>
+                  <div class="text-[9px] text-slate-400">Typical</div>
+                </div>
+                <div class="bg-slate-900/70 rounded-xl p-2 border border-slate-800/90">
+                  <div class="text-[9px] text-slate-400 uppercase font-semibold">Price / sq ft</div>
+                  <div id="specPriceSqFt" class="text-sm font-bold text-emerald-400 font-mono mt-0.5">£365</div>
+                  <div id="specPriceM2" class="text-[9px] text-slate-400">£3,920/m²</div>
+                </div>
+              </div>
+
+              <!-- Official EPC Certificate Lookup bar -->
+              <div class="flex items-center justify-between pt-1 border-t border-slate-700/50 text-[11px]">
+                <div class="flex items-center space-x-1.5 text-slate-400 truncate">
+                  <span class="w-2 h-2 rounded-full bg-emerald-400 shrink-0"></span>
+                  <span class="truncate">Gov EPC Register (certified m² & rooms):</span>
+                </div>
+                <a id="epcGovLink" href="https://find-energy-certificate.service.gov.uk/find-a-certificate/search-by-postcode" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1 rounded-lg bg-indigo-600/20 hover:bg-indigo-600/30 text-indigo-300 hover:text-indigo-200 border border-indigo-500/30 font-semibold flex items-center space-x-1 transition shrink-0 ml-2">
+                  <span>Official EPC Register</span>
+                  <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                  </svg>
+                </a>
+              </div>
+            </div>
+
+            <!-- Council Tax & Local Authority Card -->
+            <div class="bg-gradient-to-r from-slate-800/90 to-slate-800/50 rounded-2xl p-3.5 border border-slate-700/80 flex items-center justify-between text-xs shadow-md">
+              <div class="flex items-center space-x-3">
+                <div id="ctaxBandCircle" class="w-11 h-11 rounded-xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 font-extrabold text-lg flex items-center justify-center font-mono shadow-inner shrink-0">
+                  D
+                </div>
+                <div>
+                  <div class="flex items-center space-x-1.5">
+                    <span class="font-bold text-white text-xs">Council Tax Band <span id="ctaxBandLetter" class="text-emerald-400">D</span></span>
+                    <span class="text-[10px] text-slate-400 font-mono">(1991 VOA: <span id="ctaxRange1991">£68k-£88k</span>)</span>
+                  </div>
+                  <div class="text-[11px] text-slate-200 font-medium mt-0.5">
+                    Est. <strong id="ctaxAnnualBill" class="text-emerald-400 font-mono text-xs">£2,171</strong> / year <span class="text-slate-400">(&sim;<span id="ctaxMonthlyBill">£181</span>/mo)</span>
+                  </div>
+                  <div class="text-[10px] text-slate-400 mt-0.5">
+                    Council: <span id="ctaxLocalAuthority" class="text-slate-300 font-semibold">Local Authority</span>
+                  </div>
+                </div>
+              </div>
+              <a id="ctaxGovLink" href="https://www.tax.service.gov.uk/check-council-tax-band/search" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-xl bg-blue-600/20 hover:bg-blue-600/30 text-blue-400 hover:text-blue-300 border border-blue-500/30 text-[11px] font-semibold flex items-center space-x-1 transition shrink-0 ml-2">
+                <span>GOV.UK</span>
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                </svg>
+              </a>
+            </div>
+
+            <!-- Historical Price Trend Chart -->
+            <div class="bg-slate-800/60 rounded-2xl p-4 border border-slate-800">
+              <div class="flex items-center justify-between mb-3">
+                <div class="flex items-center space-x-2">
+                  <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/>
+                  </svg>
+                  <h3 class="text-xs font-bold uppercase tracking-wider text-slate-300">Price Paid Timeline (£)</h3>
+                </div>
+                <span class="text-[10px] text-slate-500">Official Land Registry</span>
+              </div>
+              
+              <!-- Responsive SVG Chart Canvas -->
+              <div id="chartContainer" class="w-full h-44 relative">
+                <svg id="priceChart" class="w-full h-full overflow-visible"></svg>
+                <div id="chartTooltip" class="absolute hidden pointer-events-none bg-slate-950/95 border border-slate-700 px-2.5 py-1.5 rounded-lg shadow-xl text-xs z-30">
+                  <div id="tooltipDate" class="text-[10px] text-slate-400">Date</div>
+                  <div id="tooltipPrice" class="text-xs font-bold text-emerald-400 font-mono">Price</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Chronological Sales History Cards -->
+            <div class="space-y-2">
+              <div class="flex items-center justify-between">
+                <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400">Complete Transaction Log</h3>
+                <span id="logCountLabel" class="text-[11px] text-slate-500">3 records found</span>
+              </div>
+              <div id="transactionTimeline" class="space-y-2.5">
+                <!-- Transaction items injected dynamically -->
+              </div>
+            </div>
+
+          </div>
+
+          <!-- TAB 2: Street & Postcode Analytics -->
+          <div id="areaContent" class="space-y-4 hidden">
+            <!-- Postcode Overview Card -->
+            <div class="bg-slate-800/60 rounded-2xl p-4 border border-slate-800">
+              <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Postcode Market Pulse (<span id="areaPostcodeCode" class="font-mono text-blue-400">SW11 1TH</span>)</h3>
+              
+              <div class="grid grid-cols-2 gap-3 mb-4">
+                <div class="bg-slate-900/60 p-3 rounded-xl border border-slate-800/80">
+                  <span class="text-[10px] uppercase font-semibold text-slate-400">Average Sale Price</span>
+                  <div id="areaAvgPrice" class="text-base sm:text-lg font-bold text-emerald-400 font-mono">£342,500</div>
+                  <span class="text-[10px] text-slate-500">Across recorded sales</span>
+                </div>
+                <div class="bg-slate-900/60 p-3 rounded-xl border border-slate-800/80">
+                  <span class="text-[10px] uppercase font-semibold text-slate-400">Median Sale Price</span>
+                  <div id="areaMedianPrice" class="text-base sm:text-lg font-bold text-blue-400 font-mono">£290,000</div>
+                  <span class="text-[10px] text-slate-500">Middle value</span>
+                </div>
+                <div class="bg-slate-900/60 p-3 rounded-xl border border-slate-800/80">
+                  <span class="text-[10px] uppercase font-semibold text-slate-400">Lowest Recorded</span>
+                  <div id="areaMinPrice" class="text-sm font-semibold text-slate-300 font-mono">£76,000</div>
+                  <span id="areaMinDate" class="text-[10px] text-slate-500">1996</span>
+                </div>
+                <div class="bg-slate-900/60 p-3 rounded-xl border border-slate-800/80">
+                  <span class="text-[10px] uppercase font-semibold text-slate-400">Highest Recorded</span>
+                  <div id="areaMaxPrice" class="text-sm font-semibold text-slate-300 font-mono">£895,000</div>
+                  <span id="areaMaxDate" class="text-[10px] text-slate-500">2021</span>
+                </div>
+              </div>
+
+              <!-- Property Type Breakdown -->
+              <div class="space-y-2">
+                <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Property Types in Postcode:</span>
+                <div id="propertyTypeBars" class="space-y-1.5 text-xs">
+                  <!-- Breakdown bars injected dynamically -->
+                </div>
+              </div>
+            </div>
+
+            <!-- List of All Properties in Postcode -->
+            <div class="bg-slate-800/60 rounded-2xl p-4 border border-slate-800">
+              <div class="flex items-center justify-between mb-2">
+                <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400">All Properties in this Postcode</h3>
+                <span id="areaTotalProps" class="text-[11px] text-slate-500">14 properties</span>
+              </div>
+              <div id="allPropertiesList" class="space-y-1.5 max-h-96 overflow-y-auto custom-scrollbar pr-1">
+                <!-- Properties injected dynamically -->
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </aside>
+    </main>
+
+    <!-- Dedicated Google Street View 360 Modal -->
+    <div id="streetViewModal" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-[750] flex items-center justify-center p-3 sm:p-6 hidden">
+      <div class="bg-slate-900 border border-slate-700 rounded-2xl w-full max-w-4xl h-[80vh] flex flex-col shadow-2xl overflow-hidden">
+        <!-- Header -->
+        <div class="bg-slate-900/95 border-b border-slate-800 px-4 py-3 flex items-center justify-between shrink-0">
+          <div class="flex items-center space-x-2.5">
+            <div class="w-8 h-8 rounded-xl bg-blue-600/20 text-blue-400 flex items-center justify-center">
+              <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+            </div>
+            <div>
+              <h3 id="svModalTitle" class="text-sm font-bold text-white">Google Street View</h3>
+              <p id="svModalSub" class="text-[11px] text-slate-400">Interactive 360° visual inspection</p>
+            </div>
+          </div>
+          <div class="flex items-center space-x-2">
+            <a id="svDirectLink" href="#" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-xl bg-blue-600/20 hover:bg-blue-600/30 text-blue-400 border border-blue-500/30 text-xs font-semibold flex items-center space-x-1.5 transition">
+              <span>Open in Google Maps</span>
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+            </a>
+            <button id="closeStreetViewBtn" class="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Street View Panorama Container -->
+        <div class="relative flex-1 bg-slate-950 w-full h-full overflow-hidden">
+          <div id="streetViewPanorama" class="w-full h-full"></div>
+          <div id="streetViewFallback" class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center space-y-4">
+            <div class="w-16 h-16 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 shadow-inner">
+              <svg class="w-8 h-8 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+            </div>
+            <div>
+              <h4 id="svFallbackTitle" class="text-base font-bold text-white mb-1">Look Directly at House on Google Street View</h4>
+              <p class="text-xs text-slate-400 max-w-md">Click below to open the official Google Street View camera facing this exact property coordinate in 360° high definition.</p>
+            </div>
+            <a id="btnFallbackLaunch" href="#" target="_blank" rel="noopener noreferrer" class="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm shadow-lg shadow-blue-500/30 transition flex items-center space-x-2">
+              <span>View House on Google Street View (360°)</span>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Settings & API Key Modal -->
+    <div id="settingsModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-[700] flex items-center justify-center p-4 hidden">
+      <div class="bg-slate-900 border border-slate-700 rounded-2xl w-full max-w-md p-6 shadow-2xl space-y-4">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-2">
+            <div class="w-8 h-8 rounded-lg bg-blue-600/20 text-blue-400 flex items-center justify-center">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+              </svg>
+            </div>
+            <h3 class="text-base font-bold text-white">Map & API Configuration</h3>
+          </div>
+          <button id="closeSettingsBtn" class="text-slate-400 hover:text-white p-1">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </button>
+        </div>
+
+        <div class="space-y-3 text-xs text-slate-300">
+          <p class="leading-relaxed">
+            The app is currently running in <span class="text-emerald-400 font-semibold" id="currentModeLabel">Interactive Demo Mode (Zero Key Required)</span> using high-res OpenStreetMap tiles and the official UK Government Land Registry API.
+          </p>
+
+          <div class="space-y-1">
+            <label class="font-semibold text-slate-200">Google Maps JavaScript API Key (Optional):</label>
+            <input 
+              type="text" 
+              id="googleApiKeyInput" 
+              placeholder="AIzaSy..." 
+              class="w-full bg-slate-950 text-slate-100 px-3 py-2.5 rounded-xl border border-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono text-xs"
+            />
+            <p class="text-[11px] text-slate-400">
+              When provided, the app activates the official Google Maps SDK (with Satellite view, 45° imagery, and Google Places autocomplete).
+            </p>
+          </div>
+
+          <div class="bg-slate-950/70 p-3 rounded-xl border border-slate-800 space-y-1">
+            <div class="font-semibold text-slate-300">Data Sources:</div>
+            <div class="text-[11px] text-slate-400">&bull; <span class="text-blue-400 font-medium">HM Land Registry:</span> Official Price Paid Data (Open Government Licence v3.0)</div>
+            <div class="text-[11px] text-slate-400">&bull; <span class="text-indigo-400 font-medium">MHCLG EPC Register:</span> Energy Performance Certificates, certified m² floor space & rooms</div>
+            <div class="text-[11px] text-slate-400">&bull; <span class="text-emerald-400 font-medium">VOA 1991 Valuation:</span> Council Tax Band statutory bands and regional local authority averages</div>
+            <div class="text-[11px] text-slate-400">&bull; <span class="text-cyan-400 font-medium">Postcodes.io:</span> UK Postcode & Coordinate reverse geocoding</div>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-end space-x-2 pt-2">
+          <button id="resetKeyBtn" class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-slate-200 transition">
+            Use Free Demo Mode
+          </button>
+          <button id="saveKeyBtn" class="px-4 py-2 rounded-xl text-xs font-semibold bg-blue-600 hover:bg-blue-500 text-white transition shadow-md shadow-blue-600/30">
+            Save & Switch Engine
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Leaflet JS for instant zero-key fallback -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <!-- Application Logic -->
+  <script src="app.js"></script>
+</body>
+</html>

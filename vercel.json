@@ -1,0 +1,18 @@
+{
+  "version": 2,
+  "cleanUrls": true,
+  "rewrites": [
+    {
+      "source": "/api/landregistry",
+      "destination": "https://landregistry.data.gov.uk/data/ppi/transaction-record.json"
+    },
+    {
+      "source": "/api/postcodes/:path*",
+      "destination": "https://api.postcodes.io/postcodes/:path*"
+    },
+    {
+      "source": "/api/postcodes",
+      "destination": "https://api.postcodes.io/postcodes"
+    }
+  ]
+}
