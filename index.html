@@ -20,7 +20,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
   
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="styles.css?v=20261104-90m" />
 </head>
 <body class="bg-slate-900 text-slate-100 antialiased overflow-hidden select-none">
   <div id="app" class="flex flex-col h-screen w-screen overflow-hidden">
@@ -607,7 +607,15 @@
 
   <!-- Leaflet JS for instant zero-key fallback -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-  <!-- Application Logic -->
-  <script src="app.js"></script>
+  <script>
+    // Force clear any stale service worker caches from earlier sessions
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(regs => {
+        for (const reg of regs) reg.unregister();
+      });
+    }
+  </script>
+  <!-- Application Logic with cache-busting -->
+  <script src="app.js?v=20261104-90m"></script>
 </body>
 </html>

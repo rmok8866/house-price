@@ -2990,7 +2990,11 @@ const UI = {
 
       const txs = state.groupedProperties[addr];
 
-      const sp = PropertySpecService.estimate(txs, state.areaStats);
+      const latest = txs[txs.length - 1];
+
+      const epc = EpcService.matchCertificate(addr, latest?.address?.paon, latest?.address?.saon, latest?.address?.postcode);
+
+      const sp = PropertySpecService.estimate(txs, state.areaStats, epc);
 
       const opt = document.createElement('option');
 
@@ -3526,7 +3530,9 @@ const UI = {
 
       const ctax = CouncilTaxService.estimateBand(txs);
 
-      const specs = PropertySpecService.estimate(txs, state.areaStats);
+      const epc = EpcService.matchCertificate(addr, paon, latest.address?.saon, latest.address?.postcode);
+
+      const specs = PropertySpecService.estimate(txs, state.areaStats, epc);
 
 
 
