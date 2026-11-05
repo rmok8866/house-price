@@ -966,956 +966,191 @@ const CouncilTaxService = {
 
 
 
-const PRELOADED_EPC_DATABASE = {
-
-  "B77 4QN": {
-
-    "1": {
-
-        "floorAreaM2": 90.0,
-
-        "floorAreaSqFt": 969,
-
-        "propertyType": "Semi-detached house",
-
-        "rating": "",
-
-        "certUrl": "https://find-energy-certificate.service.gov.uk/energy-certificate/7034-2233-0400-0507-0222"
-
-    },
-
-    "2": {
-
-        "floorAreaM2": 90.0,
-
-        "floorAreaSqFt": 969,
-
-        "propertyType": "Semi-detached house",
-
-        "rating": "",
-
-        "certUrl": "https://find-energy-certificate.service.gov.uk/energy-certificate/1134-2233-0400-0527-0226"
-
-    },
-
-    "3": {
-
-        "floorAreaM2": 90.0,
-
-        "floorAreaSqFt": 969,
-
-        "propertyType": "Semi-detached house",
-
-        "rating": "",
-
-        "certUrl": "https://find-energy-certificate.service.gov.uk/energy-certificate/9330-3099-2090-2925-3865"
-
-    },
-
-    "4": {
-
-        "floorAreaM2": 90.0,
-
-        "floorAreaSqFt": 969,
-
-        "propertyType": "Semi-detached house",
-
-        "rating": "",
-
-        "certUrl": "https://find-energy-certificate.service.gov.uk/energy-certificate/9635-1939-3009-0939-8226"
-
-    },
-
-    "5": {
-
-        "floorAreaM2": 129.0,
-
-        "floorAreaSqFt": 1389,
-
-        "propertyType": "Detached house",
-
-        "rating": "",
-
-        "certUrl": "https://find-energy-certificate.service.gov.uk/energy-certificate/9330-3299-1020-2994-6861"
-
-    },
-
-    "6": {
-
-        "floorAreaM2": 65.0,
-
-        "floorAreaSqFt": 700,
-
-        "propertyType": "End-terrace house",
-
-        "rating": "",
-
-        "certUrl": "https://find-energy-certificate.service.gov.uk/energy-certificate/0340-3328-1490-2405-5561"
-
-    },
-
-    "7": {
-
-        "floorAreaM2": 65.0,
-
-        "floorAreaSqFt": 700,
-
-        "propertyType": "Mid-terrace house",
-
-        "rating": "",
-
-        "certUrl": "https://find-energy-certificate.service.gov.uk/energy-certificate/0330-3721-8490-2405-5505"
-
-    },
-
-    "8": {
-
-        "floorAreaM2": 65.0,
-
-        "floorAreaSqFt": 700,
-
-        "propertyType": "End-terrace house",
-
-        "rating": "",
-
-        "certUrl": "https://find-energy-certificate.service.gov.uk/energy-certificate/1235-1439-4409-0279-5222"
-
-    },
-
-    "9": {
-
-        "floorAreaM2": 106.0,
-
-        "floorAreaSqFt": 1141,
-
-        "propertyType": "Detached house",
-
-        "rating": "",
-
-        "certUrl": "https://find-energy-certificate.service.gov.uk/energy-certificate/2699-3945-2309-7595-9200"
-
-    },
-
-    "10": {
-
-        "floorAreaM2": 120.0,
-
-        "floorAreaSqFt": 1292,
-
-        "propertyType": "Detached house",
-
-        "rating": "",
-
-        "certUrl": "https://find-energy-certificate.service.gov.uk/energy-certificate/5835-1239-4009-0149-9226"
-
-    },
-
-    "11": {
-
-        "floorAreaM2": 120.0,
-
-        "floorAreaSqFt": 1292,
-
-        "propertyType": "Detached house",
-
-        "rating": "",
-
-        "certUrl": "https://find-energy-certificate.service.gov.uk/energy-certificate/4335-0639-6409-0179-6222"
-
-    },
-
-    "12": {
-
-        "floorAreaM2": 129.0,
-
-        "floorAreaSqFt": 1389,
-
-        "propertyType": "Detached house",
-
-        "rating": "",
-
-        "certUrl": "https://find-energy-certificate.service.gov.uk/energy-certificate/4435-4232-2000-0146-9202"
-
-    },
-
-    "14": {
-
-        "floorAreaM2": 90.0,
-
-        "floorAreaSqFt": 969,
-
-        "propertyType": "Semi-detached house",
-
-        "rating": "",
-
-        "certUrl": "https://find-energy-certificate.service.gov.uk/energy-certificate/5035-4437-6000-0469-9226"
-
-    },
-
-    "15": {
-
-        "floorAreaM2": 90.0,
-
-        "floorAreaSqFt": 969,
-
-        "propertyType": "Semi-detached house",
-
-        "rating": "",
-
-        "certUrl": "https://find-energy-certificate.service.gov.uk/energy-certificate/0360-3449-4070-2425-6975"
-
-    },
-
-    "16": {
-
-        "floorAreaM2": 105.0,
-
-        "floorAreaSqFt": 1130,
-
-        "propertyType": "Detached house",
-
-        "rating": "",
-
-        "certUrl": "https://find-energy-certificate.service.gov.uk/energy-certificate/8900-6496-0432-0025-3753"
-
-    },
-
-    "17": {
-
-        "floorAreaM2": 104.0,
-
-        "floorAreaSqFt": 1119,
-
-        "propertyType": "Detached house",
-
-        "rating": "",
-
-        "certUrl": "https://find-energy-certificate.service.gov.uk/energy-certificate/3700-1410-0932-5321-3443"
-
-    },
-
-    "18": {
-
-        "floorAreaM2": 130.0,
-
-        "floorAreaSqFt": 1399,
-
-        "propertyType": "Detached house",
-
-        "rating": "",
-
-        "certUrl": "https://find-energy-certificate.service.gov.uk/energy-certificate/0310-3824-8360-2094-3961"
-
-    },
-
-    "19": {
-
-        "floorAreaM2": 106.0,
-
-        "floorAreaSqFt": 1141,
-
-        "propertyType": "Detached house",
-
-        "rating": "",
-
-        "certUrl": "https://find-energy-certificate.service.gov.uk/energy-certificate/0839-3038-3306-4074-7200"
-
-    },
-
-    "20": {
-
-        "floorAreaM2": 90.0,
-
-        "floorAreaSqFt": 969,
-
-        "propertyType": "Semi-detached house",
-
-        "rating": "",
-
-        "certUrl": "https://find-energy-certificate.service.gov.uk/energy-certificate/4334-2139-1300-0424-4222"
-
-    },
-
-    "21": {
-
-        "floorAreaM2": 90.0,
-
-        "floorAreaSqFt": 969,
-
-        "propertyType": "Semi-detached house",
-
-        "rating": "",
-
-        "certUrl": "https://find-energy-certificate.service.gov.uk/energy-certificate/0310-3744-1390-2124-6405"
-
-    },
-
-    "22": {
-
-        "floorAreaM2": 130.0,
-
-        "floorAreaSqFt": 1399,
-
-        "propertyType": "Detached house",
-
-        "rating": "",
-
-        "certUrl": "https://find-energy-certificate.service.gov.uk/energy-certificate/6734-0236-3300-0230-9226"
-
-    },
-
-    "23": {
-
-        "floorAreaM2": 112.0,
-
-        "floorAreaSqFt": 1206,
-
-        "propertyType": "Detached house",
-
-        "rating": "",
-
-        "certUrl": "https://find-energy-certificate.service.gov.uk/energy-certificate/9034-4837-8300-0029-5296"
-
-    },
-
-    "24": {
-
-        "floorAreaM2": 130.0,
-
-        "floorAreaSqFt": 1399,
-
-        "propertyType": "Detached house",
-
-        "rating": "",
-
-        "certUrl": "https://find-energy-certificate.service.gov.uk/energy-certificate/9734-9932-1300-0455-4292"
-
-    },
-
-    "25": {
-
-        "floorAreaM2": 66.0,
-
-        "floorAreaSqFt": 710,
-
-        "propertyType": "End-terrace house",
-
-        "rating": "",
-
-        "certUrl": "https://find-energy-certificate.service.gov.uk/energy-certificate/2000-6061-0332-1495-3343"
-
-    },
-
-    "26": {
-
-        "floorAreaM2": 66.0,
-
-        "floorAreaSqFt": 710,
-
-        "propertyType": "Mid-terrace house",
-
-        "rating": "",
-
-        "certUrl": "https://find-energy-certificate.service.gov.uk/energy-certificate/9364-3040-4303-1034-0200"
-
-    },
-
-    "27": {
-
-        "floorAreaM2": 66.0,
-
-        "floorAreaSqFt": 710,
-
-        "propertyType": "Mid-terrace house",
-
-        "rating": "",
-
-        "certUrl": "https://find-energy-certificate.service.gov.uk/energy-certificate/8134-3033-1400-0356-0296"
-
-    },
-
-    "28": {
-
-        "floorAreaM2": 66.0,
-
-        "floorAreaSqFt": 710,
-
-        "propertyType": "End-terrace house",
-
-        "rating": "",
-
-        "certUrl": "https://find-energy-certificate.service.gov.uk/energy-certificate/9764-3040-3303-1834-0204"
-
-    },
-
-    "29": {
-
-        "floorAreaM2": 66.0,
-
-        "floorAreaSqFt": 710,
-
-        "propertyType": "End-terrace house",
-
-        "rating": "",
-
-        "certUrl": "https://find-energy-certificate.service.gov.uk/energy-certificate/0015-3039-8303-2504-8200"
-
-    },
-
-    "30": {
-
-        "floorAreaM2": 66.0,
-
-        "floorAreaSqFt": 710,
-
-        "propertyType": "Mid-terrace house",
-
-        "rating": "",
-
-        "certUrl": "https://find-energy-certificate.service.gov.uk/energy-certificate/0320-3301-8330-2804-1971"
-
-    },
-
-    "31": {
-
-        "floorAreaM2": 66.0,
-
-        "floorAreaSqFt": 710,
-
-        "propertyType": "Mid-terrace house",
-
-        "rating": "",
-
-        "certUrl": "https://find-energy-certificate.service.gov.uk/energy-certificate/0320-3901-7330-2804-4935"
-
-    },
-
-    "32": {
-
-        "floorAreaM2": 66.0,
-
-        "floorAreaSqFt": 710,
-
-        "propertyType": "End-terrace house",
-
-        "rating": "",
-
-        "certUrl": "https://find-energy-certificate.service.gov.uk/energy-certificate/2834-7833-2300-0001-9206"
-
-    },
-
-    "33": {
-
-        "floorAreaM2": 104.0,
-
-        "floorAreaSqFt": 1119,
-
-        "propertyType": "Detached house",
-
-        "rating": "",
-
-        "certUrl": "https://find-energy-certificate.service.gov.uk/energy-certificate/2734-4332-2300-0423-5222"
-
-    },
-
-    "34": {
-
-        "floorAreaM2": 66.0,
-
-        "floorAreaSqFt": 710,
-
-        "propertyType": "End-terrace house",
-
-        "rating": "",
-
-        "certUrl": "https://find-energy-certificate.service.gov.uk/energy-certificate/2026-3035-7302-1694-1200"
-
-    },
-
-    "35": {
-
-        "floorAreaM2": 66.0,
-
-        "floorAreaSqFt": 710,
-
-        "propertyType": "Mid-terrace house",
-
-        "rating": "",
-
-        "certUrl": "https://find-energy-certificate.service.gov.uk/energy-certificate/0320-3801-5330-2804-6945"
-
-    },
-
-    "36": {
-
-        "floorAreaM2": 66.0,
-
-        "floorAreaSqFt": 710,
-
-        "propertyType": "Mid-terrace house",
-
-        "rating": "",
-
-        "certUrl": "https://find-energy-certificate.service.gov.uk/energy-certificate/0534-5733-1300-0145-9206"
-
-    },
-
-    "37": {
-
-        "floorAreaM2": 66.0,
-
-        "floorAreaSqFt": 710,
-
-        "propertyType": "End-terrace house",
-
-        "rating": "",
-
-        "certUrl": "https://find-energy-certificate.service.gov.uk/energy-certificate/0157-3039-0303-1714-7200"
-
-    },
-
-    "38": {
-
-        "floorAreaM2": 112.0,
-
-        "floorAreaSqFt": 1206,
-
-        "propertyType": "Detached house",
-
-        "rating": "",
-
-        "certUrl": "https://find-energy-certificate.service.gov.uk/energy-certificate/0390-3462-5350-2224-2815"
-
-    },
-
-    "39": {
-
-        "floorAreaM2": 106.0,
-
-        "floorAreaSqFt": 1141,
-
-        "propertyType": "Detached house",
-
-        "rating": "",
-
-        "certUrl": "https://find-energy-certificate.service.gov.uk/energy-certificate/0330-3175-0340-2324-7705"
-
-    },
-
-    "40": {
-
-        "floorAreaM2": 66.0,
-
-        "floorAreaSqFt": 710,
-
-        "propertyType": "End-terrace house",
-
-        "rating": "",
-
-        "certUrl": "https://find-energy-certificate.service.gov.uk/energy-certificate/5134-8632-8300-0423-4202"
-
-    },
-
-    "41": {
-
-        "floorAreaM2": 66.0,
-
-        "floorAreaSqFt": 710,
-
-        "propertyType": "Mid-terrace house",
-
-        "rating": "",
-
-        "certUrl": "https://find-energy-certificate.service.gov.uk/energy-certificate/8400-3309-0332-4371-3943"
-
-    },
-
-    "42": {
-
-        "floorAreaM2": 66.0,
-
-        "floorAreaSqFt": 710,
-
-        "propertyType": "Mid-terrace house",
-
-        "rating": "",
-
-        "certUrl": "https://find-energy-certificate.service.gov.uk/energy-certificate/0610-3036-9304-7694-7200"
-
-    },
-
-    "43": {
-
-        "floorAreaM2": 66.0,
-
-        "floorAreaSqFt": 710,
-
-        "propertyType": "End-terrace house",
-
-        "rating": "",
-
-        "certUrl": "https://find-energy-certificate.service.gov.uk/energy-certificate/0330-3054-7370-2994-3585"
-
-    },
-
-    "44": {
-
-        "floorAreaM2": 130.0,
-
-        "floorAreaSqFt": 1399,
-
-        "propertyType": "Detached house",
-
-        "rating": "",
-
-        "certUrl": "https://find-energy-certificate.service.gov.uk/energy-certificate/0390-3447-9430-2224-8071"
-
-    },
-
-    "45": {
-
-        "floorAreaM2": 106.0,
-
-        "floorAreaSqFt": 1141,
-
-        "propertyType": "Detached house",
-
-        "rating": "",
-
-        "certUrl": "https://find-energy-certificate.service.gov.uk/energy-certificate/0370-3229-5280-2877-4901"
-
-    },
-
-    "46": {
-
-        "floorAreaM2": 64.0,
-
-        "floorAreaSqFt": 689,
-
-        "propertyType": "End-terrace house",
-
-        "rating": "",
-
-        "certUrl": "https://find-energy-certificate.service.gov.uk/energy-certificate/0300-3991-8390-2994-6301"
-
-    },
-
-    "47": {
-
-        "floorAreaM2": 64.0,
-
-        "floorAreaSqFt": 689,
-
-        "propertyType": "Mid-terrace house",
-
-        "rating": "",
-
-        "certUrl": "https://find-energy-certificate.service.gov.uk/energy-certificate/7000-6521-0932-4401-3843"
-
-    },
-
-    "48": {
-
-        "floorAreaM2": 64.0,
-
-        "floorAreaSqFt": 689,
-
-        "propertyType": "Mid-terrace house",
-
-        "rating": "",
-
-        "certUrl": "https://find-energy-certificate.service.gov.uk/energy-certificate/5634-9334-2300-0775-7222"
-
-    },
-
-    "49": {
-
-        "floorAreaM2": 64.0,
-
-        "floorAreaSqFt": 689,
-
-        "propertyType": "End-terrace house",
-
-        "rating": "",
-
-        "certUrl": "https://find-energy-certificate.service.gov.uk/energy-certificate/0274-3931-2309-9877-8200"
-
-    },
-
-    "50": {
-
-        "floorAreaM2": 104.0,
-
-        "floorAreaSqFt": 1119,
-
-        "propertyType": "Detached house",
-
-        "rating": "",
-
-        "certUrl": "https://find-energy-certificate.service.gov.uk/energy-certificate/3037-1730-4309-0844-0202"
-
-    },
-
-    "51": {
-
-        "floorAreaM2": 130.0,
-
-        "floorAreaSqFt": 1399,
-
-        "propertyType": "Detached house",
-
-        "rating": "",
-
-        "certUrl": "https://find-energy-certificate.service.gov.uk/energy-certificate/9340-3475-0320-2807-7225"
-
-    },
-
-    "52": {
-
-        "floorAreaM2": 136.0,
-
-        "floorAreaSqFt": 1464,
-
-        "propertyType": "Detached house",
-
-        "rating": "",
-
-        "certUrl": "https://find-energy-certificate.service.gov.uk/energy-certificate/9637-4331-0300-0750-0226"
-
-    }
-
-}
-
-};
+const PRELOADED_EPC_DATABASE = {"B77 4QN":{"1":{"floorAreaM2":90.0,"floorAreaSqFt":969,"propertyType":"Semi-detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/7034-2233-0400-0507-0222"},"2":{"floorAreaM2":90.0,"floorAreaSqFt":969,"propertyType":"Semi-detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/1134-2233-0400-0527-0226"},"3":{"floorAreaM2":90.0,"floorAreaSqFt":969,"propertyType":"Semi-detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/9330-3099-2090-2925-3865"},"4":{"floorAreaM2":90.0,"floorAreaSqFt":969,"propertyType":"Semi-detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/9635-1939-3009-0939-8226"},"5":{"floorAreaM2":129.0,"floorAreaSqFt":1389,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/9330-3299-1020-2994-6861"},"6":{"floorAreaM2":65.0,"floorAreaSqFt":700,"propertyType":"End-terrace house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0340-3328-1490-2405-5561"},"7":{"floorAreaM2":65.0,"floorAreaSqFt":700,"propertyType":"Mid-terrace house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0330-3721-8490-2405-5505"},"8":{"floorAreaM2":65.0,"floorAreaSqFt":700,"propertyType":"End-terrace house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/1235-1439-4409-0279-5222"},"9":{"floorAreaM2":106.0,"floorAreaSqFt":1141,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/2699-3945-2309-7595-9200"},"10":{"floorAreaM2":120.0,"floorAreaSqFt":1292,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/5835-1239-4009-0149-9226"},"11":{"floorAreaM2":120.0,"floorAreaSqFt":1292,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/4335-0639-6409-0179-6222"},"12":{"floorAreaM2":129.0,"floorAreaSqFt":1389,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/4435-4232-2000-0146-9202"},"14":{"floorAreaM2":90.0,"floorAreaSqFt":969,"propertyType":"Semi-detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/5035-4437-6000-0469-9226"},"15":{"floorAreaM2":90.0,"floorAreaSqFt":969,"propertyType":"Semi-detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0360-3449-4070-2425-6975"},"16":{"floorAreaM2":105.0,"floorAreaSqFt":1130,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/8900-6496-0432-0025-3753"},"17":{"floorAreaM2":104.0,"floorAreaSqFt":1119,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/3700-1410-0932-5321-3443"},"18":{"floorAreaM2":130.0,"floorAreaSqFt":1399,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0310-3824-8360-2094-3961"},"19":{"floorAreaM2":106.0,"floorAreaSqFt":1141,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0839-3038-3306-4074-7200"},"20":{"floorAreaM2":90.0,"floorAreaSqFt":969,"propertyType":"Semi-detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/4334-2139-1300-0424-4222"},"21":{"floorAreaM2":90.0,"floorAreaSqFt":969,"propertyType":"Semi-detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0310-3744-1390-2124-6405"},"22":{"floorAreaM2":130.0,"floorAreaSqFt":1399,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/6734-0236-3300-0230-9226"},"23":{"floorAreaM2":112.0,"floorAreaSqFt":1206,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/9034-4837-8300-0029-5296"},"24":{"floorAreaM2":130.0,"floorAreaSqFt":1399,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/9734-9932-1300-0455-4292"},"25":{"floorAreaM2":66.0,"floorAreaSqFt":710,"propertyType":"End-terrace house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/2000-6061-0332-1495-3343"},"26":{"floorAreaM2":66.0,"floorAreaSqFt":710,"propertyType":"Mid-terrace house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/9364-3040-4303-1034-0200"},"27":{"floorAreaM2":66.0,"floorAreaSqFt":710,"propertyType":"Mid-terrace house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/8134-3033-1400-0356-0296"},"28":{"floorAreaM2":66.0,"floorAreaSqFt":710,"propertyType":"End-terrace house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/9764-3040-3303-1834-0204"},"29":{"floorAreaM2":66.0,"floorAreaSqFt":710,"propertyType":"End-terrace house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0015-3039-8303-2504-8200"},"30":{"floorAreaM2":66.0,"floorAreaSqFt":710,"propertyType":"Mid-terrace house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0320-3301-8330-2804-1971"},"31":{"floorAreaM2":66.0,"floorAreaSqFt":710,"propertyType":"Mid-terrace house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0320-3901-7330-2804-4935"},"32":{"floorAreaM2":66.0,"floorAreaSqFt":710,"propertyType":"End-terrace house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/2834-7833-2300-0001-9206"},"33":{"floorAreaM2":104.0,"floorAreaSqFt":1119,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/2734-4332-2300-0423-5222"},"34":{"floorAreaM2":66.0,"floorAreaSqFt":710,"propertyType":"End-terrace house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/2026-3035-7302-1694-1200"},"35":{"floorAreaM2":66.0,"floorAreaSqFt":710,"propertyType":"Mid-terrace house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0320-3801-5330-2804-6945"},"36":{"floorAreaM2":66.0,"floorAreaSqFt":710,"propertyType":"Mid-terrace house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0534-5733-1300-0145-9206"},"37":{"floorAreaM2":66.0,"floorAreaSqFt":710,"propertyType":"End-terrace house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0157-3039-0303-1714-7200"},"38":{"floorAreaM2":112.0,"floorAreaSqFt":1206,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0390-3462-5350-2224-2815"},"39":{"floorAreaM2":106.0,"floorAreaSqFt":1141,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0330-3175-0340-2324-7705"},"40":{"floorAreaM2":66.0,"floorAreaSqFt":710,"propertyType":"End-terrace house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/5134-8632-8300-0423-4202"},"41":{"floorAreaM2":66.0,"floorAreaSqFt":710,"propertyType":"Mid-terrace house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/8400-3309-0332-4371-3943"},"42":{"floorAreaM2":66.0,"floorAreaSqFt":710,"propertyType":"Mid-terrace house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0610-3036-9304-7694-7200"},"43":{"floorAreaM2":66.0,"floorAreaSqFt":710,"propertyType":"End-terrace house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0330-3054-7370-2994-3585"},"44":{"floorAreaM2":130.0,"floorAreaSqFt":1399,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0390-3447-9430-2224-8071"},"45":{"floorAreaM2":106.0,"floorAreaSqFt":1141,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0370-3229-5280-2877-4901"},"46":{"floorAreaM2":64.0,"floorAreaSqFt":689,"propertyType":"End-terrace house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0300-3991-8390-2994-6301"},"47":{"floorAreaM2":64.0,"floorAreaSqFt":689,"propertyType":"Mid-terrace house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/7000-6521-0932-4401-3843"},"48":{"floorAreaM2":64.0,"floorAreaSqFt":689,"propertyType":"Mid-terrace house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/5634-9334-2300-0775-7222"},"49":{"floorAreaM2":64.0,"floorAreaSqFt":689,"propertyType":"End-terrace house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0274-3931-2309-9877-8200"},"50":{"floorAreaM2":104.0,"floorAreaSqFt":1119,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/3037-1730-4309-0844-0202"},"51":{"floorAreaM2":130.0,"floorAreaSqFt":1399,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/9340-3475-0320-2807-7225"},"52":{"floorAreaM2":136.0,"floorAreaSqFt":1464,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/9637-4331-0300-0750-0226"}},"B77 4QF":{"1":{"floorAreaM2":169.0,"floorAreaSqFt":1819,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/7137-5537-9200-0659-5276"},"2":{"floorAreaM2":162.0,"floorAreaSqFt":1744,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/2300-3193-0132-6091-3423"},"3":{"floorAreaM2":151.0,"floorAreaSqFt":1625,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/3737-3636-5200-0157-7296"},"4":{"floorAreaM2":130.0,"floorAreaSqFt":1399,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0442-3015-7304-8292-0200"},"5":{"floorAreaM2":120.0,"floorAreaSqFt":1292,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0136-3921-3300-6012-0200"},"6":{"floorAreaM2":90.0,"floorAreaSqFt":969,"propertyType":"Semi-detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0344-3003-1304-3812-1200"},"8":{"floorAreaM2":90.0,"floorAreaSqFt":969,"propertyType":"Semi-detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/5300-2143-0132-4001-3423"},"10":{"floorAreaM2":143.0,"floorAreaSqFt":1539,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/6532-1134-3000-0114-3296"},"12":{"floorAreaM2":151.0,"floorAreaSqFt":1625,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/9427-3003-1305-3712-1204"},"14":{"floorAreaM2":151.0,"floorAreaSqFt":1625,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/9573-3016-1305-0212-3204"},"16":{"floorAreaM2":162.0,"floorAreaSqFt":1744,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0370-3534-8150-2622-3615"},"17":{"floorAreaM2":120.0,"floorAreaSqFt":1292,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0330-3213-4070-2197-5385"},"18":{"floorAreaM2":162.0,"floorAreaSqFt":1744,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0590-3016-2306-4012-9204"},"19":{"floorAreaM2":120.0,"floorAreaSqFt":1292,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/1737-4133-3000-0131-3292"},"20":{"floorAreaM2":104.0,"floorAreaSqFt":1119,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/8832-1135-3000-0124-3226"},"21":{"floorAreaM2":120.0,"floorAreaSqFt":1292,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0337-4133-3000-0104-3202"},"22":{"floorAreaM2":136.0,"floorAreaSqFt":1464,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0349-3003-1303-3112-1204"},"23":{"floorAreaM2":130.0,"floorAreaSqFt":1399,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/9537-3138-3000-0117-3222"},"24":{"floorAreaM2":130.0,"floorAreaSqFt":1399,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0300-6163-0132-8022-3323"},"25":{"floorAreaM2":130.0,"floorAreaSqFt":1399,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0330-3815-3050-2197-8375"},"26":{"floorAreaM2":120.0,"floorAreaSqFt":1292,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/1300-4143-0132-6022-3823"},"27":{"floorAreaM2":112.0,"floorAreaSqFt":1206,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0330-3719-3080-2177-0301"},"28":{"floorAreaM2":106.0,"floorAreaSqFt":1141,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0330-3215-2010-2102-6321"},"29":{"floorAreaM2":130.0,"floorAreaSqFt":1399,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/6537-3131-3000-0165-3292"},"30":{"floorAreaM2":120.0,"floorAreaSqFt":1292,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0330-3316-2010-2122-8331"},"31":{"floorAreaM2":112.0,"floorAreaSqFt":1206,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/5337-3138-3000-0168-3292"},"32":{"floorAreaM2":120.0,"floorAreaSqFt":1292,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/9330-3413-2000-2102-3341"},"33":{"floorAreaM2":104.0,"floorAreaSqFt":1119,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/9184-3003-3304-3117-1204"},"34":{"floorAreaM2":130.0,"floorAreaSqFt":1399,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0755-3003-2304-3317-1200"},"35":{"floorAreaM2":151.0,"floorAreaSqFt":1625,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0330-3774-3030-2905-3975"},"36":{"floorAreaM2":112.0,"floorAreaSqFt":1206,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0330-3610-2020-2127-4341"},"37":{"floorAreaM2":120.0,"floorAreaSqFt":1292,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0360-3329-2130-2095-0065"},"38":{"floorAreaM2":130.0,"floorAreaSqFt":1399,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/7537-2138-3000-0149-3272"},"39":{"floorAreaM2":106.0,"floorAreaSqFt":1141,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0320-3594-1130-2025-1065"},"40":{"floorAreaM2":151.0,"floorAreaSqFt":1625,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/2898-3909-9309-7155-6204"},"41":{"floorAreaM2":120.0,"floorAreaSqFt":1292,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0380-3101-7130-2125-6001"},"42":{"floorAreaM2":151.0,"floorAreaSqFt":1625,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/9329-3050-6305-7775-1204"},"43":{"floorAreaM2":129.0,"floorAreaSqFt":1389,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/4335-4738-7500-0808-3222"},"44":{"floorAreaM2":120.0,"floorAreaSqFt":1292,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/2500-3009-9305-7245-7200"},"45":{"floorAreaM2":120.0,"floorAreaSqFt":1292,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/9100-3224-0232-7100-3763"},"46":{"floorAreaM2":106.0,"floorAreaSqFt":1141,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/2704-3009-9305-7745-7204"},"47":{"floorAreaM2":151.0,"floorAreaSqFt":1625,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/8100-7472-0132-6192-3463"},"48":{"floorAreaM2":120.0,"floorAreaSqFt":1292,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0380-3610-5550-2975-5045"},"49":{"floorAreaM2":120.0,"floorAreaSqFt":1292,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/9100-3504-0032-3171-3463"},"50":{"floorAreaM2":151.0,"floorAreaSqFt":1625,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0330-3611-3130-2005-5045"},"52":{"floorAreaM2":151.0,"floorAreaSqFt":1625,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0035-6138-0100-0525-0206"}},"B77 4QL":{"1":{"floorAreaM2":46.0,"floorAreaSqFt":495,"propertyType":"Ground-floor flat","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0310-3499-2440-2405-2885"},"2":{"floorAreaM2":58.0,"floorAreaSqFt":624,"propertyType":"Ground-floor flat","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0310-3799-2440-2405-4861"},"3":{"floorAreaM2":58.0,"floorAreaSqFt":624,"propertyType":"Ground-floor flat","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0590-3048-3304-1795-4204"},"4":{"floorAreaM2":46.0,"floorAreaSqFt":495,"propertyType":"Mid-floor flat","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/2631-3009-8307-0375-4200"},"5":{"floorAreaM2":58.0,"floorAreaSqFt":624,"propertyType":"Mid-floor flat","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0300-3273-8070-2425-8981"},"6":{"floorAreaM2":58.0,"floorAreaSqFt":624,"propertyType":"Mid-floor flat","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0300-3373-8070-2425-8901"},"7":{"floorAreaM2":46.0,"floorAreaSqFt":495,"propertyType":"Top-floor flat","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/2735-7337-7400-0723-8222"},"8":{"floorAreaM2":58.0,"floorAreaSqFt":624,"propertyType":"Mid-floor flat","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/2338-3048-7307-7275-3204"},"9":{"floorAreaM2":58.0,"floorAreaSqFt":624,"propertyType":"Top-floor flat","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/1035-8337-7400-0723-8222"},"10":{"floorAreaM2":58.0,"floorAreaSqFt":624,"propertyType":"Top-floor flat","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0300-3473-8070-2425-6981"}},"B77 4QJ":{"1":{"floorAreaM2":130.0,"floorAreaSqFt":1399,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/2137-5136-3000-0157-3222"},"2":{"floorAreaM2":104.0,"floorAreaSqFt":1119,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/1132-5132-3009-0148-3206"},"3":{"floorAreaM2":112.0,"floorAreaSqFt":1206,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/9420-3903-5302-3012-1200"},"4":{"floorAreaM2":130.0,"floorAreaSqFt":1399,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/9437-4135-3000-0165-3222"},"5":{"floorAreaM2":130.0,"floorAreaSqFt":1399,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/8300-1143-0132-7004-3573"},"6":{"floorAreaM2":99.0,"floorAreaSqFt":1066,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/9375-3003-4309-3017-1204"},"7":{"floorAreaM2":99.0,"floorAreaSqFt":1066,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0330-3417-4090-2197-6321"},"8":{"floorAreaM2":130.0,"floorAreaSqFt":1399,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/3537-4133-3000-0103-3206"},"9":{"floorAreaM2":106.0,"floorAreaSqFt":1141,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0330-3713-4060-2107-0301"},"10":{"floorAreaM2":106.0,"floorAreaSqFt":1141,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/6300-5163-0132-6004-3273"}},"B77 4QP":{"1":{"floorAreaM2":130.0,"floorAreaSqFt":1399,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/2293-3003-3303-3817-1204"},"2":{"floorAreaM2":104.0,"floorAreaSqFt":1119,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0252-3003-3304-3317-1200"},"3":{"floorAreaM2":112.0,"floorAreaSqFt":1206,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0731-3003-3303-3217-1200"},"4":{"floorAreaM2":130.0,"floorAreaSqFt":1399,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0300-1143-0132-4003-3373"},"5":{"floorAreaM2":112.0,"floorAreaSqFt":1206,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/9379-3003-2307-3317-1200"},"6":{"floorAreaM2":130.0,"floorAreaSqFt":1399,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/8537-2134-3000-0138-3296"},"7":{"floorAreaM2":105.0,"floorAreaSqFt":1130,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/2041-3048-1304-4705-5204"},"8":{"floorAreaM2":129.0,"floorAreaSqFt":1389,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/3335-1534-4400-0065-8222"},"9":{"floorAreaM2":129.0,"floorAreaSqFt":1389,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0370-3524-3040-2625-3961"},"11":{"floorAreaM2":130.0,"floorAreaSqFt":1399,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/4132-5139-3009-0168-3296"},"15":{"floorAreaM2":112.0,"floorAreaSqFt":1206,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/3332-5131-3000-0109-3226"}},"B77 4QE":{"1":{"floorAreaM2":136.0,"floorAreaSqFt":1464,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0330-3117-1020-2102-1361"},"3":{"floorAreaM2":99.0,"floorAreaSqFt":1066,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/9530-3903-1302-3619-1204"},"5":{"floorAreaM2":130.0,"floorAreaSqFt":1399,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/9300-6153-0132-5000-3923"},"7":{"floorAreaM2":90.0,"floorAreaSqFt":969,"propertyType":"Semi-detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/8232-0139-3000-0123-3292"},"9":{"floorAreaM2":90.0,"floorAreaSqFt":969,"propertyType":"Semi-detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/7432-0139-3000-0144-3226"},"11":{"floorAreaM2":66.0,"floorAreaSqFt":710,"propertyType":"End-terrace house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/6300-5173-0132-7000-3223"},"12":{"floorAreaM2":120.0,"floorAreaSqFt":1292,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/1139-7638-9000-0586-2292"},"14":{"floorAreaM2":106.0,"floorAreaSqFt":1141,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/8200-1794-0232-6002-3193"},"15":{"floorAreaM2":66.0,"floorAreaSqFt":710,"propertyType":"Mid-terrace house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/5132-0132-3000-0171-3206"},"16":{"floorAreaM2":90.0,"floorAreaSqFt":969,"propertyType":"Semi-detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/2639-0831-6000-0115-2292"},"17":{"floorAreaM2":66.0,"floorAreaSqFt":710,"propertyType":"Mid-terrace house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0330-3414-0020-2192-2341"},"18":{"floorAreaM2":90.0,"floorAreaSqFt":969,"propertyType":"Semi-detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0360-3815-0010-2899-6281"},"19":{"floorAreaM2":66.0,"floorAreaSqFt":710,"propertyType":"End-terrace house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/3432-0132-3000-0114-3296"},"20":{"floorAreaM2":99.0,"floorAreaSqFt":1066,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/2659-3002-0301-4769-8204"},"21":{"floorAreaM2":106.0,"floorAreaSqFt":1141,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/2232-0137-3000-0149-3222"},"22":{"floorAreaM2":104.0,"floorAreaSqFt":1119,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0739-3903-9302-2719-1200"},"23":{"floorAreaM2":64.0,"floorAreaSqFt":689,"propertyType":"End-terrace house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0356-3038-5306-6204-7200"},"24":{"floorAreaM2":64.0,"floorAreaSqFt":689,"propertyType":"End-terrace house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/9682-3910-6300-4139-4200"},"25":{"floorAreaM2":64.0,"floorAreaSqFt":689,"propertyType":"Mid-terrace house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0300-3658-4480-2324-5135"},"26":{"floorAreaM2":64.0,"floorAreaSqFt":689,"propertyType":"Mid-terrace house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/5039-1630-2109-0800-0222"},"27":{"floorAreaM2":64.0,"floorAreaSqFt":689,"propertyType":"Mid-terrace house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0300-3258-4480-2324-8101"},"28":{"floorAreaM2":64.0,"floorAreaSqFt":689,"propertyType":"Mid-terrace house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/9340-3828-1100-2499-6021"},"29":{"floorAreaM2":64.0,"floorAreaSqFt":689,"propertyType":"End-terrace house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0300-3958-3480-2324-4125"},"30":{"floorAreaM2":64.0,"floorAreaSqFt":689,"propertyType":"End-terrace house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/9342-3902-8300-1159-9200"},"31":{"floorAreaM2":106.0,"floorAreaSqFt":1141,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0350-3717-6280-2024-5155"},"32":{"floorAreaM2":120.0,"floorAreaSqFt":1292,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/1039-0139-3009-0136-3296"},"34":{"floorAreaM2":106.0,"floorAreaSqFt":1141,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/9330-3016-0090-2199-3331"}},"B77 4QH":{"1":{"floorAreaM2":169.0,"floorAreaSqFt":1819,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/2376-3027-8306-4327-9204"},"2":{"floorAreaM2":162.0,"floorAreaSqFt":1744,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0320-3146-1240-2227-8685"},"3":{"floorAreaM2":162.0,"floorAreaSqFt":1744,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0320-3905-4240-2707-8575"},"4":{"floorAreaM2":169.0,"floorAreaSqFt":1819,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/3290-6622-0732-5291-3223"},"5":{"floorAreaM2":162.0,"floorAreaSqFt":1744,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0843-3921-8309-4572-7200"},"6":{"floorAreaM2":151.0,"floorAreaSqFt":1625,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0385-3922-8302-2302-6204"}},"B77 4QG":{"1":{"floorAreaM2":169.0,"floorAreaSqFt":1819,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/5532-8638-0100-0344-9222"},"2":{"floorAreaM2":151.0,"floorAreaSqFt":1625,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0360-3318-4180-2102-1925"},"3":{"floorAreaM2":162.0,"floorAreaSqFt":1744,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/7832-8638-0100-0364-9222"},"4":{"floorAreaM2":130.0,"floorAreaSqFt":1399,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/8900-3640-0332-4128-3823"},"5":{"floorAreaM2":162.0,"floorAreaSqFt":1744,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0330-3426-4130-2722-4805"},"6":{"floorAreaM2":162.0,"floorAreaSqFt":1744,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/9716-3018-0303-5332-4204"}},"B77 4RR":{"43":{"floorAreaM2":129.0,"floorAreaSqFt":1389,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/2490-3955-3300-6825-8204"},"45":{"floorAreaM2":90.0,"floorAreaSqFt":969,"propertyType":"Semi-detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/9266-3955-7300-9105-5200"},"47":{"floorAreaM2":90.0,"floorAreaSqFt":969,"propertyType":"Semi-detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0535-4131-0500-0210-5272"},"49":{"floorAreaM2":162.0,"floorAreaSqFt":1744,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/9090-1656-0432-1102-3953"},"51":{"floorAreaM2":120.0,"floorAreaSqFt":1292,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/9310-3880-6190-2625-7081"},"53":{"floorAreaM2":151.0,"floorAreaSqFt":1625,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/1035-5330-6109-0416-0292"},"57":{"floorAreaM2":151.0,"floorAreaSqFt":1625,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/7000-1362-0032-1198-3153"},"59":{"floorAreaM2":162.0,"floorAreaSqFt":1744,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0360-3846-4110-2395-7021"},"61":{"floorAreaM2":162.0,"floorAreaSqFt":1744,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0035-0138-1100-0807-0296"},"68":{"floorAreaM2":162.0,"floorAreaSqFt":1744,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/9360-3972-5520-2005-5781"},"70":{"floorAreaM2":162.0,"floorAreaSqFt":1744,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/2235-8532-3509-0106-7292"},"74":{"floorAreaM2":162.0,"floorAreaSqFt":1744,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0336-5032-2100-0887-1202"},"76":{"floorAreaM2":151.0,"floorAreaSqFt":1625,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/4000-5941-0932-4194-3963"},"78":{"floorAreaM2":162.0,"floorAreaSqFt":1744,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/4336-5334-1600-0530-1222"},"80":{"floorAreaM2":151.0,"floorAreaSqFt":1625,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/7136-9535-4100-0189-1202"},"82":{"floorAreaM2":162.0,"floorAreaSqFt":1744,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/7100-7570-0432-1195-3563"},"84":{"floorAreaM2":162.0,"floorAreaSqFt":1744,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/8636-1937-1500-0849-9296"},"86":{"floorAreaM2":151.0,"floorAreaSqFt":1625,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/4236-3434-5100-0530-1226"},"88":{"floorAreaM2":143.0,"floorAreaSqFt":1539,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/7100-8456-0632-8101-3563"},"90":{"floorAreaM2":143.0,"floorAreaSqFt":1539,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0350-3683-9140-2426-4105"},"92":{"floorAreaM2":105.0,"floorAreaSqFt":1130,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/8636-2535-5100-0517-1296"}},"B77 4RU":{"1":{"floorAreaM2":106.0,"floorAreaSqFt":1141,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/9857-3012-1301-3046-1200"},"2":{"floorAreaM2":162.0,"floorAreaSqFt":1744,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0300-3685-4180-2906-3125"},"3":{"floorAreaM2":65.0,"floorAreaSqFt":700,"propertyType":"End-terrace house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/2644-3012-1301-3686-1204"},"4":{"floorAreaM2":169.0,"floorAreaSqFt":1819,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/7036-4938-0100-0885-1202"},"5":{"floorAreaM2":65.0,"floorAreaSqFt":700,"propertyType":"Mid-terrace house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/2043-3012-1301-3686-1204"},"7":{"floorAreaM2":65.0,"floorAreaSqFt":700,"propertyType":"Mid-terrace house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/9330-3219-5100-2206-1211"},"9":{"floorAreaM2":65.0,"floorAreaSqFt":700,"propertyType":"End-terrace house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0636-5230-3109-0169-2202"},"11":{"floorAreaM2":129.0,"floorAreaSqFt":1389,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/8290-4330-0332-2121-3063"},"15":{"floorAreaM2":111.0,"floorAreaSqFt":1195,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/2138-3912-0300-0036-3204"}},"B77 4SG":{"1":{"floorAreaM2":65.0,"floorAreaSqFt":700,"propertyType":"End-terrace house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0519-3011-9306-9506-7204"},"2":{"floorAreaM2":105.0,"floorAreaSqFt":1130,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/1636-9132-8100-0827-1226"},"3":{"floorAreaM2":65.0,"floorAreaSqFt":700,"propertyType":"Mid-terrace house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/8036-1736-4100-0365-1292"},"4":{"floorAreaM2":120.0,"floorAreaSqFt":1292,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/1736-4631-9600-0222-6226"},"5":{"floorAreaM2":65.0,"floorAreaSqFt":700,"propertyType":"Mid-terrace house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0617-3011-3306-4216-7204"},"7":{"floorAreaM2":65.0,"floorAreaSqFt":700,"propertyType":"End-terrace house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/8636-9736-9100-0031-1202"},"8":{"floorAreaM2":120.0,"floorAreaSqFt":1292,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0360-3049-0610-2396-1625"},"9":{"floorAreaM2":111.0,"floorAreaSqFt":1195,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0390-3601-9160-2706-2155"},"10":{"floorAreaM2":111.0,"floorAreaSqFt":1195,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/2889-3012-1308-6266-0204"},"11":{"floorAreaM2":65.0,"floorAreaSqFt":700,"propertyType":"Semi-detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/2578-3011-1304-2476-4204"},"12":{"floorAreaM2":120.0,"floorAreaSqFt":1292,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/2035-3011-5304-7686-4204"},"14":{"floorAreaM2":65.0,"floorAreaSqFt":700,"propertyType":"End-terrace house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0320-3757-3150-2596-2105"},"15":{"floorAreaM2":65.0,"floorAreaSqFt":700,"propertyType":"Semi-detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0320-3777-1140-2426-7171"},"16":{"floorAreaM2":65.0,"floorAreaSqFt":700,"propertyType":"Mid-terrace house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/9100-8572-0532-4193-3563"},"17":{"floorAreaM2":82.0,"floorAreaSqFt":883,"propertyType":"Semi-detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0370-3833-9150-2506-7181"},"18":{"floorAreaM2":65.0,"floorAreaSqFt":700,"propertyType":"Mid-terrace house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0320-3257-4150-2596-4125"},"19":{"floorAreaM2":82.0,"floorAreaSqFt":883,"propertyType":"Semi-detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/5100-2303-0532-8626-3463"},"20":{"floorAreaM2":50.0,"floorAreaSqFt":538,"propertyType":"Ground-floor flat","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0320-3757-4150-2596-4171"}},"B77 4SE":{"4":{"floorAreaM2":151.0,"floorAreaSqFt":1625,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/2220-3967-7300-8686-6200"},"5":{"floorAreaM2":151.0,"floorAreaSqFt":1625,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/9811-3912-7300-6776-2204"},"6":{"floorAreaM2":162.0,"floorAreaSqFt":1744,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/8436-5630-8609-0842-7226"},"7":{"floorAreaM2":162.0,"floorAreaSqFt":1744,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/2628-3912-6300-6276-2204"},"8":{"floorAreaM2":166.0,"floorAreaSqFt":1787,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0370-3624-1130-2926-2151"},"9":{"floorAreaM2":151.0,"floorAreaSqFt":1625,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0390-3356-8180-2026-7235"},"10":{"floorAreaM2":162.0,"floorAreaSqFt":1744,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0716-3066-1301-7236-2200"}},"B77 4SH":{"1":{"floorAreaM2":105.0,"floorAreaSqFt":1130,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/2809-3061-5304-3756-3204"},"2":{"floorAreaM2":57.0,"floorAreaSqFt":614,"propertyType":"Top-floor maisonette","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/2714-3062-9305-6146-9200"},"3":{"floorAreaM2":50.0,"floorAreaSqFt":538,"propertyType":"Ground-floor flat","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/9200-5916-0432-4626-3563"},"4":{"floorAreaM2":75.0,"floorAreaSqFt":807,"propertyType":"Mid-terrace house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/5136-4935-6600-0461-2222"},"5":{"floorAreaM2":50.0,"floorAreaSqFt":538,"propertyType":"Ground-floor flat","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/7136-9935-5600-0401-2222"},"6":{"floorAreaM2":57.0,"floorAreaSqFt":614,"propertyType":"Top-floor maisonette","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/7636-2935-6600-0481-2222"},"7":{"floorAreaM2":50.0,"floorAreaSqFt":538,"propertyType":"Ground-floor flat","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0381-3063-7306-2106-2204"},"8":{"floorAreaM2":57.0,"floorAreaSqFt":614,"propertyType":"Top-floor maisonette","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0436-9236-2600-0018-3206"},"9":{"floorAreaM2":75.0,"floorAreaSqFt":807,"propertyType":"Mid-terrace house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0300-1282-0032-5605-3663"},"10":{"floorAreaM2":75.0,"floorAreaSqFt":807,"propertyType":"Mid-terrace house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/6636-1236-2600-0018-3206"},"11":{"floorAreaM2":50.0,"floorAreaSqFt":538,"propertyType":"Ground-floor flat","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/6036-6236-1600-0068-3202"},"12":{"floorAreaM2":57.0,"floorAreaSqFt":614,"propertyType":"Top-floor maisonette","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0536-9236-1600-0018-3206"},"14":{"floorAreaM2":50.0,"floorAreaSqFt":538,"propertyType":"Ground-floor flat","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/9505-3011-4303-9356-8204"},"15":{"floorAreaM2":57.0,"floorAreaSqFt":614,"propertyType":"Top-floor maisonette","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/5536-6933-8100-0069-1226"},"16":{"floorAreaM2":82.0,"floorAreaSqFt":883,"propertyType":"Mid-terrace house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/6236-9833-5100-0207-1202"},"17":{"floorAreaM2":82.0,"floorAreaSqFt":883,"propertyType":"Mid-terrace house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/8636-5836-8600-0445-3222"},"18":{"floorAreaM2":82.0,"floorAreaSqFt":883,"propertyType":"End-terrace house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/2848-3064-4303-0336-8204"},"19":{"floorAreaM2":63.0,"floorAreaSqFt":678,"propertyType":"End-terrace house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0390-3067-0610-2006-7681"},"20":{"floorAreaM2":63.0,"floorAreaSqFt":678,"propertyType":"Mid-terrace house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/9300-3812-8100-2326-3215"},"21":{"floorAreaM2":63.0,"floorAreaSqFt":678,"propertyType":"Mid-terrace house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/4436-0630-8609-0862-7226"},"22":{"floorAreaM2":63.0,"floorAreaSqFt":678,"propertyType":"End-terrace house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/5636-9031-8600-0617-6206"},"23":{"floorAreaM2":90.0,"floorAreaSqFt":969,"propertyType":"Semi-detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/2600-1432-0732-4690-3163"},"24":{"floorAreaM2":90.0,"floorAreaSqFt":969,"propertyType":"Semi-detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/9238-3066-9301-1476-4204"},"25":{"floorAreaM2":63.0,"floorAreaSqFt":678,"propertyType":"End-terrace house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0439-3967-8300-5086-1204"},"26":{"floorAreaM2":63.0,"floorAreaSqFt":678,"propertyType":"Mid-terrace house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/9340-3825-6690-2906-0761"},"27":{"floorAreaM2":63.0,"floorAreaSqFt":678,"propertyType":"Mid-terrace house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/8636-1339-0109-0525-2202"},"28":{"floorAreaM2":63.0,"floorAreaSqFt":678,"propertyType":"End-terrace house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0738-3967-8300-5886-1200"},"44":{"floorAreaM2":57.0,"floorAreaSqFt":614,"propertyType":"Top-floor maisonette","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0320-3057-5150-2596-0131"}},"B77 4FY":{"1":{"floorAreaM2":103.0,"floorAreaSqFt":1109,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/9228-2073-7378-5891-8970"},"2":{"floorAreaM2":175.0,"floorAreaSqFt":1884,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/8281-7832-5779-5957-3992"},"3":{"floorAreaM2":152.0,"floorAreaSqFt":1636,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/2258-1973-7370-5091-8950"},"4":{"floorAreaM2":175.0,"floorAreaSqFt":1884,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/9753-3899-7707-9871-0385"},"5":{"floorAreaM2":130.0,"floorAreaSqFt":1399,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/8303-5895-7939-0797-0113"},"6":{"floorAreaM2":131.0,"floorAreaSqFt":1410,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/8392-5845-7939-0797-3913"},"7":{"floorAreaM2":120.0,"floorAreaSqFt":1292,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/9848-6973-7379-5391-8914"},"8":{"floorAreaM2":120.0,"floorAreaSqFt":1292,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/9250-3898-7797-9801-5335"},"9":{"floorAreaM2":130.0,"floorAreaSqFt":1399,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/9559-3893-7796-9821-0375"},"10":{"floorAreaM2":120.0,"floorAreaSqFt":1292,"propertyType":"Detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0288-8973-7369-5291-8980"},"11":{"floorAreaM2":88.0,"floorAreaSqFt":947,"propertyType":"Semi-detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/9158-3899-7706-9871-8325"},"12":{"floorAreaM2":88.0,"floorAreaSqFt":947,"propertyType":"Semi-detached house","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0688-3973-7369-5691-8950"}},"B77 4FU":{"flat 1 ridware house":{"floorAreaM2":59.0,"floorAreaSqFt":635,"propertyType":"Ground-floor flat","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0818-4073-7351-5090-8234"},"flat 2 ridware house":{"floorAreaM2":59.0,"floorAreaSqFt":635,"propertyType":"Ground-floor flat","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0418-1073-7351-5690-8244"},"flat 3 ridware house":{"floorAreaM2":59.0,"floorAreaSqFt":635,"propertyType":"Ground-floor flat","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/8305-6815-5932-5707-5103"},"flat 4 ridware house":{"floorAreaM2":59.0,"floorAreaSqFt":635,"propertyType":"Mid-floor flat","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/8420-7831-5750-6974-3296"},"flat 5 ridware house":{"floorAreaM2":59.0,"floorAreaSqFt":635,"propertyType":"Mid-floor flat","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/8307-3845-5932-7797-6103"},"flat 6 ridware house":{"floorAreaM2":59.0,"floorAreaSqFt":635,"propertyType":"Mid-floor flat","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/9548-3073-7351-5190-8284"},"flat 7 ridware house":{"floorAreaM2":59.0,"floorAreaSqFt":635,"propertyType":"Top-floor flat","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0450-3894-7716-2890-8381"},"flat 8 ridware house":{"floorAreaM2":59.0,"floorAreaSqFt":635,"propertyType":"Top-floor flat","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/0552-3894-7716-2890-7361"},"flat 9 ridware house":{"floorAreaM2":59.0,"floorAreaSqFt":635,"propertyType":"Top-floor flat","rating":"","certUrl":"https://find-energy-certificate.service.gov.uk/energy-certificate/9348-9073-7361-5190-8234"}}};
 
 
 
 // Official UK Energy Performance Certificate (EPC) Service
 
 const EpcService = {
-
   async fetchPostcode(postcode) {
-
     if (!postcode) return [];
-
     try {
-
-      const resp = await fetch(`/api/epc?postcode=${encodeURIComponent(postcode)}`);
-
-      if (!resp.ok) return [];
-
-      const data = await resp.json();
-
-      state.epcCertificates = data.certificates || [];
-
-      return state.epcCertificates;
-
+      const cleanPc = postcode.trim().toUpperCase();
+      // Try local Vercel serverless API first
+      let resp = await fetch(`/api/epc?postcode=${encodeURIComponent(cleanPc)}`);
+      if (resp.ok && resp.headers.get('content-type')?.includes('json')) {
+        const data = await resp.json();
+        state.epcCertificates = data.certificates || [];
+        return state.epcCertificates;
+      }
+      // If deployed on static host (GitHub Pages), proxy find-energy-certificate via allorigins
+      const targetUrl = `https://find-energy-certificate.service.gov.uk/find-a-certificate/search-by-postcode?postcode=${encodeURIComponent(cleanPc.replace(/\s+/g, '+'))}`;
+      const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(targetUrl)}`;
+      const proxyResp = await fetch(proxyUrl);
+      if (!proxyResp.ok) return [];
+      const html = await proxyResp.text();
+      const rows = [...html.matchAll(/<tr class="govuk-table__row">([\s\S]*?)<\/tr>/g)];
+      const certificates = [];
+      for (const r of rows) {
+        const rowHtml = r[1];
+        const linkMatch = rowHtml.match(/href="(\/energy-certificate\/([\d\-]+))"/);
+        const addrMatch = rowHtml.match(/>([^<]+)<\/a>/);
+        const ratingMatch = rowHtml.match(/govuk-tag[^>]*>([A-G])<\/span>/);
+        if (linkMatch && addrMatch) {
+          certificates.push({
+            certId: linkMatch[2],
+            path: linkMatch[1],
+            address: addrMatch[1].trim().replace(/&#39;/g, "'"),
+            rating: ratingMatch ? ratingMatch[1] : ''
+          });
+        }
+      }
+      state.epcCertificates = certificates;
+      return certificates;
     } catch (e) {
-
       console.warn('EPC postcode fetch skipped:', e);
-
       return [];
-
     }
-
   },
 
-
-
   matchCertificate(fullAddress, paon, saon, postcode = null) {
-
     // 0. User custom floor area override in localStorage
-
     try {
-
-      const customRaw = localStorage.getItem(custom_floor_area_);
-
+      const customRaw = localStorage.getItem('custom_floor_area_' + fullAddress);
       if (customRaw) {
-
         const custom = JSON.parse(customRaw);
-
         if (custom && custom.floorAreaM2) {
-
           return {
-
             ...custom,
-
             isUserCustom: true,
-
             isOfficialEpc: false,
-
             source: 'User Custom (Manual Entry)'
-
           };
-
         }
-
       }
-
     } catch (e) {}
 
-
-
     // 1. Official preloaded UK government EPC registry database
-
     const cleanPc = (postcode || state.currentPostcode || '').trim().toUpperCase();
-
     if (typeof PRELOADED_EPC_DATABASE !== 'undefined' && PRELOADED_EPC_DATABASE[cleanPc]) {
-
       const pcDb = PRELOADED_EPC_DATABASE[cleanPc];
-
       const numMatch = (paon || '').match(/^\d+[A-Z]?/i) || (fullAddress || '').match(/^\d+[A-Z]?/i) || (fullAddress || '').match(/\b\d+[A-Z]?\b/i);
-
       if (numMatch) {
-
         const num = numMatch[0].toLowerCase();
-
         if (pcDb[num]) {
-
           return {
-
             ...pcDb[num],
-
             certId: num,
-
             isOfficialEpc: true,
-
             source: 'Gov EPC Register (Surveyed)'
-
           };
-
         }
-
       }
 
+      // Check full address key matching (e.g. flats or descriptive addresses)
+      const cleanAddrKey = (fullAddress || '').toLowerCase().replace(/[^a-z0-9 ]/g, ' ').replace(/\s+/g, ' ').trim();
+      for (const [k, v] of Object.entries(pcDb)) {
+        if (cleanAddrKey.includes(k) || k.includes(cleanAddrKey)) {
+          return {
+            ...v,
+            certId: k,
+            isOfficialEpc: true,
+            source: 'Gov EPC Register (Surveyed)'
+          };
+        }
+      }
     }
-
-
 
     if (!state.epcCertificates || state.epcCertificates.length === 0) return null;
 
-
-
     const norm = str => (str || '').toLowerCase().replace(/[^a-z0-9]/g, ' ').replace(/\s+/g, ' ').trim();
-
     const cleanFull = norm(fullAddress);
-
     const cleanPaon = norm(paon);
-
     const cleanSaon = norm(saon);
 
-
-
     // 1. Try exact or full contains match
-
     for (const cert of state.epcCertificates) {
-
       const certAddr = norm(cert.address);
-
       if (cleanFull && certAddr.includes(cleanFull)) return cert;
-
       if (cleanFull && cleanFull.includes(certAddr)) return cert;
-
     }
-
-
 
     // 2. Match by PAON and SAON if present
-
     if (cleanPaon) {
-
       for (const cert of state.epcCertificates) {
-
         const certAddr = norm(cert.address);
-
         const certTokens = certAddr.split(' ');
-
         if (certTokens.includes(cleanPaon)) {
-
           if (cleanSaon) {
-
             if (certAddr.includes(cleanSaon)) return cert;
-
           } else {
-
             return cert;
-
           }
-
         }
-
       }
-
     }
-
-
 
     // 3. Match by house number from full address
-
     const numMatch = (fullAddress || '').match(/^\d+[A-Z]?/i) || (fullAddress || '').match(/\b\d+[A-Z]?\b/i);
-
     if (numMatch) {
-
       const num = numMatch[0].toLowerCase();
-
       for (const cert of state.epcCertificates) {
-
         const certAddr = norm(cert.address);
-
         const certTokens = certAddr.split(' ');
-
         if (certTokens.includes(num)) {
-
           return cert;
-
         }
-
       }
-
     }
-
-
 
     return null;
-
   },
 
-
-
   async fetchDetails(certId) {
-
     if (!certId) return null;
-
     if (state.epcDetailsCache && state.epcDetailsCache[certId]) {
-
       return state.epcDetailsCache[certId];
-
     }
-
     try {
+      // Try local Vercel serverless API first
+      let resp = await fetch(`/api/epc-details?certId=${encodeURIComponent(certId)}`);
+      if (resp.ok && resp.headers.get('content-type')?.includes('json')) {
+        const data = await resp.json();
+        if (!state.epcDetailsCache) state.epcDetailsCache = {};
+        state.epcDetailsCache[certId] = data;
+        return data;
+      }
 
-      const resp = await fetch(`/api/epc-details?certId=${encodeURIComponent(certId)}`);
-
-      if (!resp.ok) return null;
-
-      const data = await resp.json();
-
+      // Static host fallback via allorigins
+      const targetUrl = `https://find-energy-certificate.service.gov.uk/energy-certificate/${encodeURIComponent(certId)}`;
+      const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(targetUrl)}`;
+      const proxyResp = await fetch(proxyUrl);
+      if (!proxyResp.ok) return null;
+      const html = await proxyResp.text();
+      let floorAreaM2 = null;
+      const faMatch = html.match(/Total floor area[\s\S]*?govuk-summary-list__value[^>]*>([\s\S]*?)<\/dd>/i);
+      if (faMatch) {
+        const numMatch = faMatch[1].match(/([\d\.]+)/);
+        if (numMatch) floorAreaM2 = parseFloat(numMatch[1]);
+      }
+      let propertyType = '';
+      const ptMatch = html.match(/Property type[\s\S]*?govuk-summary-list__value[^>]*>([\s\S]*?)<\/dd>/i);
+      if (ptMatch) propertyType = ptMatch[1].replace(/<[^>]+>/g, '').trim();
+      let rating = '';
+      const ratMatch = html.match(/govuk-tag[^>]*>([A-G])<\/span>/i) ||
+                       html.match(/current-energy-rating[^>]*>([A-G])<\/span>/i);
+      if (ratMatch) rating = ratMatch[1].toUpperCase();
+      const floorAreaSqFt = floorAreaM2 ? Math.round(floorAreaM2 * 10.7639) : null;
+      const data = { certId, floorAreaM2, floorAreaSqFt, propertyType, rating, url: targetUrl };
       if (!state.epcDetailsCache) state.epcDetailsCache = {};
-
       state.epcDetailsCache[certId] = data;
-
       return data;
-
     } catch (e) {
-
       console.warn('EPC details fetch failed:', e);
-
       return null;
-
     }
-
   }
-
 };
 
 
@@ -1927,265 +1162,179 @@ const EpcService = {
 // with realistic Nationally Described Space Standard (NDSS) baselines when pending survey.
 
 const PropertySpecService = {
-
   estimate(transactions, areaStats, epcData) {
-
-    // 1. If official EPC certificate data is available, prioritize verified statutory measurements
-
+    // 1. If official EPC certificate data or user custom is available, prioritize verified statutory measurements
     if (epcData && epcData.floorAreaM2 && epcData.floorAreaM2 > 10) {
-
       const m2 = Math.round(epcData.floorAreaM2);
-
       const sqft = epcData.floorAreaSqFt || Math.round(m2 * 10.7639);
-
       const latest = transactions && transactions.length > 0 ? transactions[transactions.length - 1] : null;
-
       const price = latest ? latest.price : 0;
-
       const pricePerSqFt = sqft > 0 ? Math.round(price / sqft) : 0;
-
       const pricePerM2 = m2 > 0 ? Math.round(price / m2) : 0;
 
-
-
       let beds = 3;
-
       let baths = '1 - 2';
-
       let rooms = '4 - 5 Rooms';
-
       if (m2 < 50) {
-
-        beds = 1;
-
-        baths = '1';
-
-        rooms = '2 Rooms';
-
+        beds = 1; baths = '1'; rooms = '2 Rooms';
       } else if (m2 < 75) {
-
-        beds = 2;
-
-        baths = '1';
-
-        rooms = '3 - 4 Rooms';
-
+        beds = 2; baths = '1'; rooms = '3 - 4 Rooms';
       } else if (m2 < 115) {
-
-        beds = 3;
-
-        baths = '1 - 2';
-
-        rooms = '4 - 5 Rooms';
-
+        beds = 3; baths = '1 - 2'; rooms = '4 - 5 Rooms';
       } else if (m2 < 165) {
-
-        beds = 4;
-
-        baths = '2';
-
-        rooms = '5 - 6 Rooms';
-
+        beds = 4; baths = '2'; rooms = '5 - 6 Rooms';
       } else {
-
-        beds = 5;
-
-        baths = '2 - 3';
-
-        rooms = '7+ Rooms';
-
+        beds = 5; baths = '2 - 3'; rooms = '7+ Rooms';
       }
 
-
-
       return {
-
-        isOfficialEpc: true,
-
-        source: 'Official EPC Register',
-
-        certUrl: epcData.url,
-
-        rating: epcData.rating,
-
+        isOfficialEpc: !!epcData.isOfficialEpc,
+        isUserCustom: !!epcData.isUserCustom,
+        source: epcData.source || (epcData.isOfficialEpc ? 'Official EPC Register' : 'User Custom'),
+        certUrl: epcData.certUrl || epcData.url || '',
+        rating: epcData.rating || '',
         bedrooms: `${beds} Bed${beds > 1 ? 's' : ''}`,
-
         rawBedrooms: beds,
-
         habitableRooms: rooms,
-
         floorAreaM2: m2,
-
         floorAreaSqFt: sqft,
-
         bathrooms: baths,
-
         pricePerSqFt,
-
         pricePerM2,
-
         typeDesc: epcData.propertyType || (latest ? latest.propType : 'Verified Property')
-
       };
-
     }
 
-
-
-    // 2. Realistic UK Nationally Described Space Standards Baselines
-
+    // 2. Intelligent Property Valuation & Band Calibration Model
+    // When official EPC survey has not yet been registered, dynamically calibrate
+    // floor area based on:
+    // (A) Property Type Baseline (mid-century & modern UK housing stock)
+    // (B) Statutory Council Tax Valuation Band (Band A through H)
+    // (C) Relative Transaction Price on this street
+    // (D) Address-specific deterministic variation (no duplicate static numbers)
     if (!transactions || transactions.length === 0) {
-
       return {
-
         isOfficialEpc: false,
-
-        source: 'UK Standard',
-
+        isUserCustom: false,
+        source: 'Estimated (Valuation & Band Model)',
         bedrooms: '3 Beds',
-
         rawBedrooms: 3,
-
         habitableRooms: '4 - 5 Rooms',
-
         floorAreaM2: 88,
-
         floorAreaSqFt: 947,
-
         bathrooms: '1 - 2',
-
         pricePerSqFt: 0,
-
         pricePerM2: 0,
-
         typeDesc: 'Residential Property'
-
       };
-
     }
-
-
 
     const latest = transactions[transactions.length - 1];
+    const propType = latest.propType || 'Residential Property';
+    const price = latest.price || 0;
 
-    const propType = latest.propType;
-
-    const price = latest.price;
-
-
-
-    let floorAreaM2 = 88;
-
-    let bedrooms = 3;
-
-    let bathrooms = '1 - 2';
-
-    let habitableRooms = '4 - 5 Rooms';
-
-    let typeDesc = 'Mid-Size Home';
-
-
-
+    // (A) Type Baseline
+    let baseM2 = 90;
+    let typeDesc = 'Residential Home';
     if (propType === 'Flat / Maisonette') {
-
-      floorAreaM2 = 62;
-
-      bedrooms = 2;
-
-      bathrooms = '1';
-
-      habitableRooms = '3 Rooms';
-
+      baseM2 = 58;
       typeDesc = 'Flat / Maisonette';
-
     } else if (propType === 'Terraced') {
-
-      floorAreaM2 = 88;
-
-      bedrooms = 3;
-
-      bathrooms = '1 - 2';
-
-      habitableRooms = '4 - 5 Rooms';
-
+      baseM2 = 72;
       typeDesc = 'Terraced House';
-
     } else if (propType === 'Semi-Detached') {
-
-      floorAreaM2 = 108;
-
-      bedrooms = 3;
-
-      bathrooms = '1 - 2';
-
-      habitableRooms = '5 Rooms';
-
+      baseM2 = 90;
       typeDesc = 'Semi-Detached House';
-
     } else if (propType === 'Detached') {
-
-      floorAreaM2 = 148;
-
-      bedrooms = 4;
-
-      bathrooms = '2 - 3';
-
-      habitableRooms = '6 - 7 Rooms';
-
+      baseM2 = 128;
       typeDesc = 'Detached Family Home';
-
-    } else {
-
-      floorAreaM2 = 90;
-
-      bedrooms = 3;
-
-      bathrooms = '1 - 2';
-
-      habitableRooms = '4 - 5 Rooms';
-
-      typeDesc = 'Residential Property';
-
     }
 
+    // (B) Council Tax Band Calibration Factor
+    let bandMultiplier = 1.00;
+    try {
+      if (typeof CouncilTaxService !== 'undefined' && CouncilTaxService.estimateBand) {
+        const ctax = CouncilTaxService.estimateBand(transactions);
+        const band = ctax ? ctax.band : 'D';
+        const bandFactors = {
+          'A': 0.82,
+          'B': 0.92,
+          'C': 1.00,
+          'D': 1.16,
+          'E': 1.38,
+          'F': 1.65,
+          'G': 2.05,
+          'H': 2.50
+        };
+        bandMultiplier = bandFactors[band] || 1.00;
+      }
+    } catch (e) {}
 
+    // (C) Street Relative Price Multiplier
+    let priceFactor = 1.0;
+    try {
+      if (typeof state !== 'undefined' && state.currentTransactions && state.currentTransactions.length >= 2 && price > 0) {
+        const peers = state.currentTransactions.filter(t => t.propType === propType && t.price > 0).map(t => t.price);
+        if (peers.length >= 2) {
+          peers.sort((a, b) => a - b);
+          const medianPrice = peers[Math.floor(peers.length / 2)];
+          if (medianPrice > 0) {
+            const ratio = price / medianPrice;
+            priceFactor = Math.min(1.35, Math.max(0.78, Math.pow(ratio, 0.30)));
+          }
+        }
+      }
+    } catch (e) {}
 
-    const floorAreaSqFt = Math.round(floorAreaM2 * 10.7639);
+    // (D) Deterministic Address Variation (-3 to +3 m²) so adjacent identical homes don't display duplicate numbers
+    const addrSeed = String(latest.address?.paon || latest.address?.fullAddress || latest.address?.street || '');
+    const hash = addrSeed.split('').reduce((acc, c) => (acc * 31 + c.charCodeAt(0)) & 0xFFFF, 0);
+    const jitter = (hash % 7) - 3; // -3 to +3 m²
 
+    // Final calibrated floor area
+    let calibratedM2 = Math.round(baseM2 * bandMultiplier * priceFactor + jitter);
+
+    // Guard rails per property type
+    if (propType === 'Flat / Maisonette') calibratedM2 = Math.max(38, Math.min(140, calibratedM2));
+    else if (propType === 'Terraced') calibratedM2 = Math.max(54, Math.min(160, calibratedM2));
+    else if (propType === 'Semi-Detached') calibratedM2 = Math.max(68, Math.min(220, calibratedM2));
+    else if (propType === 'Detached') calibratedM2 = Math.max(85, Math.min(420, calibratedM2));
+    else calibratedM2 = Math.max(45, Math.min(300, calibratedM2));
+
+    const floorAreaSqFt = Math.round(calibratedM2 * 10.7639);
     const pricePerSqFt = floorAreaSqFt > 0 ? Math.round(price / floorAreaSqFt) : 0;
+    const pricePerM2 = calibratedM2 > 0 ? Math.round(price / calibratedM2) : 0;
 
-    const pricePerM2 = floorAreaM2 > 0 ? Math.round(price / floorAreaM2) : 0;
-
-
+    let bedrooms = 3;
+    let bathrooms = '1 - 2';
+    let habitableRooms = '4 - 5 Rooms';
+    if (calibratedM2 < 50) {
+      bedrooms = 1; bathrooms = '1'; habitableRooms = '2 Rooms';
+    } else if (calibratedM2 < 75) {
+      bedrooms = 2; bathrooms = '1'; habitableRooms = '3 - 4 Rooms';
+    } else if (calibratedM2 < 115) {
+      bedrooms = 3; bathrooms = '1 - 2'; habitableRooms = '4 - 5 Rooms';
+    } else if (calibratedM2 < 165) {
+      bedrooms = 4; bathrooms = '2'; habitableRooms = '5 - 6 Rooms';
+    } else {
+      bedrooms = 5; bathrooms = '2 - 3'; habitableRooms = '7+ Rooms';
+    }
 
     return {
-
       isOfficialEpc: false,
-
-      source: 'UK Standard',
-
+      isUserCustom: false,
+      source: 'Estimated (Valuation & Band Model)',
       bedrooms: `${bedrooms} Bed${bedrooms > 1 ? 's' : ''}`,
-
       rawBedrooms: bedrooms,
-
       habitableRooms,
-
-      floorAreaM2,
-
+      floorAreaM2: calibratedM2,
       floorAreaSqFt,
-
       bathrooms,
-
       pricePerSqFt,
-
       pricePerM2,
-
       typeDesc
-
     };
-
   }
-
 };
 
 
